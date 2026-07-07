@@ -1,12 +1,12 @@
 {
-    "name": "Sajdah Helper",
-    "short_name": "Sajdah Helper",
+    "name": "test_web",
+    "short_name": "test_web",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "An innovative Android application developed with Flutter that helps Muslims maintain counts of sujuds and rakats during prayer (Salah).",
-    "orientation": "portrait-primary",
+    "description": "Test",
+    "orientation": "portrait",
     "prefer_related_applications": false,
     "icons": [
         {
