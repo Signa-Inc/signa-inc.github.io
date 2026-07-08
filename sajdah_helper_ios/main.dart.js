@@ -68860,19 +68860,19 @@ if(c3>0.7&&c4.at&&a1<20){if(++c4.y>=2&&!c4.w){c4.nm()
 c4.w=!0}}else if(c3<0.13){c4.y=0
 c4.at=c4.w=!1
 c4.GU(q)}},
-a4_(c9){var s,r,q,p,o,n,m,l,k,j,i,h,g,f,e,d,c,b,a,a0,a1,a2,a3,a4,a5,a6,a7,a8,a9,b0,b1,b2,b3,b4,b5,b6,b7,b8,b9,c0,c1,c2,c3,c4,c5,c6,c7,c8=this
-if(!c8.CW||c8.cy)return
+a4_(d6){var s,r,q,p,o,n,m,l,k,j,i,h,g,f,e,d,c,b,a,a0,a1,a2,a3,a4,a5,a6,a7,a8,a9,b0,b1,b2,b3,b4,b5,b6,b7,b8,b9,c0,c1,c2,c3,c4,c5,c6,c7,c8,c9,d0,d1,d2,d3,d4,d5=this
+if(!d5.CW||d5.cy)return
 s=new A.eb(Date.now(),0,!1)
-r=c8.db
+r=d5.db
 if(r!=null&&B.d.bv(s.dj(r).a,1000)<50)return
-c8.db=s
+d5.db=s
 r=A.b3(4,null,!1,t.mU)
 q=A.d([],t.fI)
 p=t.xI
 o=J.ma(0,p)
 p=J.ma(0,p)
 n=new A.YP(new A.Dp(A.n(t.N,t.Ij)),r,q,o,p,A.d([],t.ca))
-n.ku(c9)
+n.ku(d6)
 if(q.length!==1)A.ar(A.ez("only single frame JPEGs supported"))
 m=A.aEb(n)
 l=m.geW()
@@ -68884,7 +68884,7 @@ e=B.d.bO(B.c.a9(0.299*f.gd7()+0.587*f.gcY()+0.114*f.gd2()),0,255)
 d=h+1
 i[h]=e
 g+=e}c=j>0?g/j:0
-if(!c8.go)c8.H1(c)
+if(!d5.go)d5.H1(c)
 b=new Uint8Array(j)
 for(r=k-1,q=l-1,a=0,a0=1;a0<r;)for(p=(a0-1)*l,o=a0*l,++a0,a1=a0*l,a2=1;a2<q;a2=a5){a3=a2-1
 a4=i[p+a3]
@@ -68894,10 +68894,10 @@ a7=i[o+a3]
 a8=i[o+a5]
 a3=-1*i[a1+a3]
 a9=i[a1+a5]
-if(B.d.bO(Math.abs(-1*a4+a6+-2*a7+2*a8+a3+a9)+Math.abs(a4+2*i[p+a2]+a6+a3-2*i[a1+a2]-a9),0,255)>40){b[o+a2]=255;++a}}if(c8.cx&&c8.ch)c8.aa(new A.aea(c8,b,l,k))
-if(c8.r==null){c8.r=new Uint8Array(A.cu(i))
-c8.ax.sq(c)
-return}r=c8.e
+if(B.d.bO(Math.abs(-1*a4+a6+-2*a7+2*a8+a3+a9)+Math.abs(a4+2*i[p+a2]+a6+a3-2*i[a1+a2]-a9),0,255)>40){b[o+a2]=255;++a}}if(d5.cx&&d5.ch)d5.aa(new A.aea(d5,b,l,k))
+if(d5.r==null){d5.r=new Uint8Array(A.cu(i))
+d5.ax.sq(c)
+return}r=d5.e
 b0=r==null?null:r.a.CW.c
 if(b0==null)b0=270
 if(b0===270){b1=l>>>1
@@ -68907,20 +68907,27 @@ b2=k}else{b2=k>>>1
 b3=l}b1=0}b4=B.c.cf(l/8)
 b5=B.c.cf(k/8)
 b6=A.b3(b4*b5,!1,!1,t.y)
-for(r=c8.r,b7=0,a0=0;a0<b2;a0+=8){b8=a0*l
+for(r=d5.r,b7=0,a0=0;a0<b2;a0+=8){b8=a0*l
 for(q=B.d.bv(a0,8)*b4,a2=b1;a2<b3;a2+=8){b9=b8+a2
 c0=B.d.bv(a2,8)
 if(b9<j&&b9<r.length){++b7
-if(Math.abs(i[b9]-r[b9])>40)b6[q+c0]=!0}}}for(r=b5-1,q=b4-1,c1=0,c2=1;c2<r;++c2)for(p=c2*b4,c3=1;c3<q;++c3){if(!b6[p+c3])continue
-for(c4=0,c5=-1;c5<=1;++c5)for(o=(c2+c5)*b4,c6=-1;c6<=1;++c6)if(b6[o+(c3+c6)])++c4
-if(c4>=4)++c1}c7=b7>0?c1/b7:0
-c8.ay.sq(c7)
-c8.ax.sq(c)
-if(a>150)c8.at=!0
-if(c7>0.7&&c8.at&&a<20){if(++c8.y>=2&&!c8.w){c8.nm()
-c8.w=!0}}else if(c7<0.13){c8.y=0
-c8.at=c8.w=!1
-c8.GU(i)}},
+if(Math.abs(i[b9]-r[b9])>40)b6[q+c0]=!0}}}for(r=b5-1,q=b4-1,c1=k,c2=l,c3=0,c4=0,c5=0,c6=1;c6<r;++c6)for(p=c6*b4,c7=c6*8,c8=1;c8<q;++c8){if(!b6[p+c8])continue
+for(c9=0,d0=-1;d0<=1;++d0)for(o=(c6+d0)*b4,d1=-1;d1<=1;++d1)if(b6[o+(c8+d1)])++c9
+if(c9>=4){++c5
+d2=c8*8
+if(d2<c2)c2=d2
+if(d2>c3)c3=d2
+if(c7<c1)c1=c7
+if(c7>c4)c4=c7}}d3=b7>0?c5/b7:0
+d5.ay.sq(d3)
+d5.ax.sq(c)
+if(a>150)d5.at=!0
+if(c5>10)d4=c1>k*0.15&&c4>k*0.6
+else d4=!1
+if(d3>0.7&&d5.at&&a<20&&d4){if(++d5.y>=2&&!d5.w){d5.nm()
+d5.w=!0}}else if(d3<0.13){d5.y=0
+d5.at=d5.w=!1
+d5.GU(i)}},
 H1(a){var s=this
 s.go=!0
 s.dx=!1
