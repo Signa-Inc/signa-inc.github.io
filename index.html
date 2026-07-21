@@ -1152,7 +1152,8 @@
 
         async function loadSiteData() {
             try {
-                const response = await fetch('data.json');
+                // Добавлена сброс-метка кэша (?v=), чтобы iOS Safari обязательно загружал свежий JSON
+                const response = await fetch('data.json?v=' + Date.now());
                 if (!response.ok) throw new Error('Ошибка сети при загрузке JSON');
                 siteData = await response.json();
                 
@@ -1354,7 +1355,7 @@
                         : `<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>`;
 
                     linkHtml = `
-                        <a class="news-link-btn" href="${item.url}" target="_blank" rel="noopener noreferrer">
+                        <a class="news-link-btn" href="${encodeURI(item.url)}" target="_blank" rel="noopener noreferrer">
                             ${iconSvg}
                             <span>${linkText}</span>
                         </a>
@@ -1412,88 +1413,91 @@
             });
         }
 
-        // Функция открытия деталей проекта (теперь работает МГНОВЕННО без fetch)
-function openDetails(identifier, pushState = true) {
-    const project = siteData.projects.find(p => 
-        p.id === identifier || 
-        slugify(p.title) === identifier
-    );
-    if (!project) return;
+        // Функция открытия деталей проекта
+        function openDetails(identifier, pushState = true) {
+            const project = siteData.projects.find(p => 
+                p.id === identifier || 
+                slugify(p.title) === identifier
+            );
+            if (!project) return;
 
-    const projectSlug = slugify(project.title);
+            const projectSlug = slugify(project.title);
 
-    document.getElementById('detail-title').innerText = project.title;
-    
-    const statusEl = document.getElementById('detail-status');
-    statusEl.innerText = project.statusText;
-    statusEl.className = `status ${project.status === 'dev' ? 'dev' : 'done'}`;
+            document.getElementById('detail-title').innerText = project.title;
+            
+            const statusEl = document.getElementById('detail-status');
+            statusEl.innerText = project.statusText;
+            statusEl.className = `status ${project.status === 'dev' ? 'dev' : 'done'}`;
 
-    document.getElementById('detail-desc').innerText = project.fullDescription;
+            document.getElementById('detail-desc').innerText = project.fullDescription;
 
-    const gallery = document.getElementById('detail-gallery');
-    gallery.innerHTML = '';
-    gallery.scrollLeft = 0;
-    
-    // 1. Добавляем видео, если оно есть
-    if (project.video && project.video.trim() !== '') {
-        if (project.video.includes('youtube.com') || project.video.includes('youtu.be')) {
-            gallery.innerHTML += `
-                <iframe class="gallery-video" src="${project.video}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-            `;
-        } else {
-            gallery.innerHTML += `
-                <video class="gallery-video" controls preload="metadata">
-                    <source src="${project.video}">
-                    Ваш браузер не поддерживает видео.
-                </video>
-            `;
+            const gallery = document.getElementById('detail-gallery');
+            gallery.innerHTML = '';
+            gallery.scrollLeft = 0;
+            
+            // 1. Добавляем видео, если оно есть
+            if (project.video && project.video.trim() !== '') {
+                if (project.video.includes('youtube.com') || project.video.includes('youtu.be')) {
+                    gallery.innerHTML += `
+                        <iframe class="gallery-video" src="${encodeURI(project.video)}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    `;
+                } else {
+                    gallery.innerHTML += `
+                        <video class="gallery-video" controls preload="metadata">
+                            <source src="${encodeURI(project.video)}">
+                            Ваш браузер не поддерживает видео.
+                        </video>
+                    `;
+                }
+            }
+
+            // 2. Генерируем пути к скриншотам на основе screenshotsCount
+            const count = project.screenshotsCount || 0;
+
+            if (count > 0) {
+                for (let i = 1; i <= count; i++) {
+                    const imgUrl = `Screenshots/${project.id}/${i}.webp`;
+                    gallery.innerHTML += `<img src="${imgUrl}" class="gallery-img" loading="lazy" alt="${project.title}" onclick="openLightbox('${imgUrl}')">`;
+                }
+            } else {
+                // Если скриншотов = 0 -> Добавляем обложку/заглушку
+                const coverUrl = `Screenshots/${project.id}/cover.webp`;
+                gallery.innerHTML += `
+                    <img src="${coverUrl}" 
+                         class="gallery-img" 
+                         loading="lazy" 
+                         alt="${project.title}" 
+                         onclick="openLightbox('${coverUrl}')" 
+                         onerror="this.onerror=null; this.src='https://placehold.co/600x400/161b26/94a3b8?text=Скриншоты+скоро+появится';">
+                `;
+            }
+
+            // 3. Ссылки и кнопки (экранируем пробелы и спецсимволы в URL)
+            const linksContainer = document.getElementById('detail-links');
+            linksContainer.innerHTML = '';
+            if (project.links && Array.isArray(project.links)) {
+                project.links.forEach(link => {
+                    const safeUrl = encodeURI(link.url);
+                    linksContainer.innerHTML += `<a href="${safeUrl}" target="_blank">${link.name}</a>`;
+                });
+            }
+
+            const buyContainer = document.getElementById('buy-container');
+            buyContainer.innerHTML = '';
+            if (project.price) {
+                buyContainer.innerHTML = `<button class="btn-buy" onclick="alert('Переход к оплате...')">Купить за ${project.price}</button>`;
+            }
+
+            // Переключение экрана
+            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+            document.getElementById('page-details').classList.add('active');
+            gallery.scrollLeft = 0;
+            window.scrollTo(0, 0);
+
+            if (pushState) {
+                history.pushState({ pageId: 'page-details', projectId: project.id }, '', '#project-' + projectSlug);
+            }
         }
-    }
-
-    // 2. Генерируем пути к скриншотам на основе screenshotsCount
-    const count = project.screenshotsCount || 0;
-
-    if (count > 0) {
-        for (let i = 1; i <= count; i++) {
-            const imgUrl = `Screenshots/${project.id}/${i}.webp`;
-            gallery.innerHTML += `<img src="${imgUrl}" class="gallery-img" loading="lazy" alt="${project.title}" onclick="openLightbox('${imgUrl}')">`;
-        }
-    } else {
-        // Если скриншотов = 0 -> Добавляем обложку/заглушку
-        const coverUrl = `Screenshots/${project.id}/cover.webp`;
-        gallery.innerHTML += `
-            <img src="${coverUrl}" 
-                 class="gallery-img" 
-                 loading="lazy" 
-                 alt="${project.title}" 
-                 onclick="openLightbox('${coverUrl}')" 
-                 onerror="this.onerror=null; this.src='https://placehold.co/600x400/161b26/94a3b8?text=Скриншоты+скоро+появятся';">
-        `;
-    }
-
-    // 3. Ссылки и кнопки
-    const linksContainer = document.getElementById('detail-links');
-    linksContainer.innerHTML = '';
-    project.links.forEach(link => {
-        linksContainer.innerHTML += `<a href="${link.url}" target="_blank">${link.name}</a>`;
-    });
-
-    const buyContainer = document.getElementById('buy-container');
-    buyContainer.innerHTML = '';
-    if (project.price) {
-        buyContainer.innerHTML = `<button class="btn-buy" onclick="alert('Переход к оплате...')">Купить за ${project.price}</button>`;
-    }
-
-    // Переключение экрана
-    document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
-    document.getElementById('page-details').classList.add('active');
-    gallery.scrollLeft = 0;
-    window.scrollTo(0, 0);
-
-    if (pushState) {
-        history.pushState({ pageId: 'page-details', projectId: project.id }, '', '#project-' + projectSlug);
-    }
-}
     </script>
 </body>
 </html>
