@@ -519,6 +519,7 @@
             font-weight: 600;
             border-radius: 8px;
             transition: all 0.2s ease;
+            cursor: pointer;
         }
 
         .contacts-dropdown a:hover {
@@ -532,6 +533,144 @@
             stroke: var(--primary-color);
         }
 
+        /* --- Модальное окно обратной связи --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(11, 13, 18, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: var(--surface-card);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 32px;
+            width: 100%;
+            max-width: 480px;
+            position: relative;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 30px var(--primary-glow);
+            transform: scale(0.95) translateY(10px);
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: scale(1) translateY(0);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            padding: 0;
+        }
+
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-main);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 6px;
+            background: linear-gradient(135deg, #ffffff, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .modal-subtitle {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+            line-height: 1.5;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-group label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(11, 13, 18, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            color: var(--text-main);
+            font-family: inherit;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            outline: none;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 12px var(--primary-glow);
+            background: rgba(11, 13, 18, 0.9);
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 110px;
+        }
+
+        .form-success {
+            display: none;
+            text-align: center;
+            padding: 20px 0 10px;
+        }
+
+        .form-success-icon {
+            width: 56px;
+            height: 56px;
+            background: rgba(6, 182, 212, 0.15);
+            border: 1px solid var(--accent-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            color: var(--accent-color);
+        }
+
         @media (max-width: 768px) {
             header { padding: 16px 20px; }
             .container { padding: 30px 16px; }
@@ -541,6 +680,7 @@
             .gallery-img, .gallery-video { width: 100%; height: 220px; }
             footer { padding: 20px; flex-direction: column; align-items: flex-start; }
             .contacts-dropdown { right: auto; left: 0; }
+            .modal-content { padding: 24px; }
         }
     </style>
 </head>
@@ -601,7 +741,9 @@
 
         <div class="footer-actions">
             <a href="https://t.me/Signa_Inc" target="_blank" class="btn-telegram-channel">
-                <path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/>
+                </svg>
                 Telegram Канал
             </a>
 
@@ -610,11 +752,12 @@
                     Контакты
                 </button>
                 <div class="contacts-dropdown" id="contactsDropdown">
-                    <a href="https://t.me/ваш_логин" target="_blank">
+                    <a href="https://t.me/SignaInc_Dev" target="_blank">
                         <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
                         Telegram
                     </a>
-                    <a href="https://mail.google.com/mail/?view=cm&fs=1&to=contact@signainc.ru" target="_blank">
+                    <!-- Кнопка вызова модальной формы обратной связи -->
+                    <a href="#" onclick="openFeedbackModal(event)">
                         <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
                         Email
                     </a>
@@ -622,6 +765,62 @@
             </div>
         </div>
     </footer>
+
+    <!-- Модальное окно обратной связи -->
+    <div class="modal-overlay" id="feedbackModal" onclick="closeModalOnOverlay(event)">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeFeedbackModal()" aria-label="Закрыть">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+
+            <div id="modalFormContainer">
+                <h3 class="modal-title">Написать нам</h3>
+                <p class="modal-subtitle">Заполните форму ниже, и мы ответим вам на указанную почту в ближайшее время.</p>
+                
+                <form id="feedbackForm" onsubmit="handleFeedbackSubmit(event)">
+                    <div class="form-group">
+                        <label for="feedbackName">Ваше имя</label>
+                        <input type="text" id="feedbackName" class="form-control" placeholder="Иван" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="feedbackEmail">Ваш Email</label>
+                        <input type="email" id="feedbackEmail" class="form-control" placeholder="example@mail.ru" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="feedbackSubject">Тема обращения</label>
+                        <input type="text" id="feedbackSubject" class="form-control" placeholder="Сотрудничество / Вопрос по проекту">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="feedbackMessage">Сообщение</label>
+                        <textarea id="feedbackMessage" class="form-control" placeholder="Опишите ваш вопрос или предложение..." required></textarea>
+                    </div>
+
+                    <button type="submit" class="btn-primary" style="width: 100%; margin-top: 8px; padding: 14px;">
+                        Отправить сообщение
+                    </button>
+                </form>
+            </div>
+
+            <div id="modalSuccessContainer" class="form-success">
+                <div class="form-success-icon">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                </div>
+                <h3 style="font-size: 1.3rem; margin-bottom: 8px;">Сообщение отправлено!</h3>
+                <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 24px; line-height: 1.5;">
+                    Спасибо за обращение. Мы свяжемся с вами в ближайшее время.
+                </p>
+                <button class="btn-secondary" onclick="closeFeedbackModal()" style="margin-bottom: 0; width: 100%;">Понятно</button>
+            </div>
+        </div>
+    </div>
 
     <script>
         let siteData = { profile: {}, news: [], projects: [] };
@@ -675,6 +874,62 @@
             }
         });
 
+        /* --- Управление модальным окном обратной связи --- */
+        function openFeedbackModal(event) {
+            if (event) event.preventDefault();
+            
+            // Закрываем выпадающее меню контактов
+            const dropdown = document.getElementById('contactsDropdown');
+            const btn = document.getElementById('contactsBtn');
+            if (dropdown) dropdown.classList.remove('show');
+            if (btn) btn.classList.remove('active');
+
+            // Сбрасываем форму в исходное состояние
+            document.getElementById('feedbackForm').reset();
+            document.getElementById('modalFormContainer').style.display = 'block';
+            document.getElementById('modalSuccessContainer').style.display = 'none';
+
+            // Показываем модальное окно
+            const modal = document.getElementById('feedbackModal');
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeFeedbackModal() {
+            const modal = document.getElementById('feedbackModal');
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function closeModalOnOverlay(event) {
+            if (event.target === event.currentTarget) {
+                closeFeedbackModal();
+            }
+        }
+
+        // Закрытие модального окна по клавише Escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeFeedbackModal();
+            }
+        });
+
+        // Обработка отправки формы
+        function handleFeedbackSubmit(event) {
+            event.preventDefault();
+
+            const name = document.getElementById('feedbackName').value;
+            const email = document.getElementById('feedbackEmail').value;
+            const subject = document.getElementById('feedbackSubject').value;
+            const message = document.getElementById('feedbackMessage').value;
+
+            console.log('Отправка формы обратной связи:', { name, email, subject, message });
+
+            // Показываем экран успешной отправки
+            document.getElementById('modalFormContainer').style.display = 'none';
+            document.getElementById('modalSuccessContainer').style.display = 'block';
+        }
+
         function renderNews() {
             const container = document.getElementById('news-container');
             if (!container) return;
@@ -702,10 +957,12 @@
         }
 
         const galleryElement = document.getElementById('detail-gallery');
-        galleryElement.addEventListener('wheel', (e) => {
-            e.preventDefault();
-            galleryElement.scrollLeft += e.deltaY;
-        }, { passive: false });
+        if (galleryElement) {
+            galleryElement.addEventListener('wheel', (e) => {
+                e.preventDefault();
+                galleryElement.scrollLeft += e.deltaY;
+            }, { passive: false });
+        }
 
         function navigate(pageId) {
             document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
@@ -775,61 +1032,61 @@
         }
 
         /* Страница деталей с динамическим поиском скриншотов */
-async function openDetails(id) {
-    const project = siteData.projects.find(p => p.id === id);
-    if (!project) return;
+        async function openDetails(id) {
+            const project = siteData.projects.find(p => p.id === id);
+            if (!project) return;
 
-    document.getElementById('detail-title').innerText = project.title;
-    
-    const statusEl = document.getElementById('detail-status');
-    statusEl.innerText = project.statusText;
-    statusEl.className = `status ${project.status === 'dev' ? 'dev' : 'done'}`;
+            document.getElementById('detail-title').innerText = project.title;
+            
+            const statusEl = document.getElementById('detail-status');
+            statusEl.innerText = project.statusText;
+            statusEl.className = `status ${project.status === 'dev' ? 'dev' : 'done'}`;
 
-    document.getElementById('detail-desc').innerText = project.fullDescription;
+            document.getElementById('detail-desc').innerText = project.fullDescription;
 
-    const gallery = document.getElementById('detail-gallery');
-    gallery.innerHTML = '';
-    gallery.scrollLeft = 0; // Сбрасываем ползунок в начало при открытии
-    
-    // 1. Отрисовка видео
-    if (project.video && project.video.trim() !== '') {
-        if (project.video.includes('youtube.com') || project.video.includes('youtu.be')) {
-            gallery.innerHTML += `
-                <iframe class="gallery-video" src="${project.video}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-            `;
-        } else {
-            gallery.innerHTML += `
-                <video class="gallery-video" controls preload="metadata">
-                    <source src="${project.video}">
-                    Ваш браузер не поддерживает видео.
-                </video>
-            `;
+            const gallery = document.getElementById('detail-gallery');
+            gallery.innerHTML = '';
+            gallery.scrollLeft = 0; // Сбрасываем ползунок в начало при открытии
+            
+            // 1. Отрисовка видео
+            if (project.video && project.video.trim() !== '') {
+                if (project.video.includes('youtube.com') || project.video.includes('youtu.be')) {
+                    gallery.innerHTML += `
+                        <iframe class="gallery-video" src="${project.video}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    `;
+                } else {
+                    gallery.innerHTML += `
+                        <video class="gallery-video" controls preload="metadata">
+                            <source src="${project.video}">
+                            Ваш браузер не поддерживает видео.
+                        </video>
+                    `;
+                }
+            }
+
+            // 2. Автоматический поиск и отрисовка скриншотов из папки Screenshots/{id}/
+            const screenshots = await getProjectScreenshots(id);
+            screenshots.forEach(imgUrl => {
+                gallery.innerHTML += `<img src="${imgUrl}" class="gallery-img" loading="lazy" alt="${project.title}">`;
+            });
+
+            const linksContainer = document.getElementById('detail-links');
+            linksContainer.innerHTML = '';
+            project.links.forEach(link => {
+                linksContainer.innerHTML += `<a href="${link.url}" target="_blank">${link.name}</a>`;
+            });
+
+            const buyContainer = document.getElementById('buy-container');
+            buyContainer.innerHTML = '';
+            if (project.price) {
+                buyContainer.innerHTML = `<button class="btn-buy" onclick="alert('Переход к оплате...')">Купить за ${project.price}</button>`;
+            }
+
+            navigate('page-details');
+            
+            // Финальная страховка: сбрасываем скролл после того, как страница полностью переключена
+            gallery.scrollLeft = 0;
         }
-    }
-
-    // 2. Автоматический поиск и отрисовка скриншотов из папки Screenshots/{id}/
-    const screenshots = await getProjectScreenshots(id);
-    screenshots.forEach(imgUrl => {
-        gallery.innerHTML += `<img src="${imgUrl}" class="gallery-img" loading="lazy" alt="${project.title}">`;
-    });
-
-    const linksContainer = document.getElementById('detail-links');
-    linksContainer.innerHTML = '';
-    project.links.forEach(link => {
-        linksContainer.innerHTML += `<a href="${link.url}" target="_blank">${link.name}</a>`;
-    });
-
-    const buyContainer = document.getElementById('buy-container');
-    buyContainer.innerHTML = '';
-    if (project.price) {
-        buyContainer.innerHTML = `<button class="btn-buy" onclick="alert('Переход к оплате...')">Купить за ${project.price}</button>`;
-    }
-
-    navigate('page-details');
-    
-    // Финальная страховка: сбрасываем скролл после того, как страница полностью переключена
-    gallery.scrollLeft = 0;
-}
     </script>
 </body>
 </html>
