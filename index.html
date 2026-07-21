@@ -431,7 +431,7 @@
             transform: translateY(-2px);
         }
 
-        /* Подвал и элементы управления */
+        /* Подвал */
         footer {
             margin-top: auto;
             border-top: 1px solid var(--border-color);
@@ -479,9 +479,7 @@
             color: #ffffff;
         }
 
-        .footer-contacts-wrapper {
-            position: relative;
-        }
+        .footer-contacts-wrapper { position: relative; }
 
         .contacts-dropdown {
             position: absolute;
@@ -602,13 +600,11 @@
         </div>
 
         <div class="footer-actions">
-            <!-- Отдельная кнопка Телеграм Канала -->
             <a href="https://t.me/Signa_Inc" target="_blank" class="btn-telegram-channel">
-                <path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
                 Telegram Канал
             </a>
 
-            <!-- Выпадающее меню Контактов (Личка + Email) -->
             <div class="footer-contacts-wrapper">
                 <button class="btn-contacts" id="contactsBtn" onclick="toggleContacts(event)">
                     Контакты
@@ -628,14 +624,8 @@
     </footer>
 
     <script>
-        // Глобальное хранилище загруженных данных
-        let siteData = {
-            profile: {},
-            news: [],
-            projects: []
-        };
+        let siteData = { profile: {}, news: [], projects: [] };
 
-        /* Загрузка данных из JSON файла */
         async function loadSiteData() {
             try {
                 const response = await fetch('data.json');
@@ -649,7 +639,6 @@
             }
         }
 
-        /* Заполнение информации о профиле */
         function renderProfile() {
             if (!siteData.profile) return;
 
@@ -665,12 +654,10 @@
             }
         }
 
-        /* Инициализация при старте */
         document.addEventListener('DOMContentLoaded', () => {
             loadSiteData();
         });
 
-        /* Переключение всплывающего меню контактов */
         function toggleContacts(event) {
             event.stopPropagation();
             const dropdown = document.getElementById('contactsDropdown');
@@ -679,7 +666,6 @@
             btn.classList.toggle('active');
         }
 
-        /* Закрытие меню контактов при клике вне его */
         document.addEventListener('click', (event) => {
             const dropdown = document.getElementById('contactsDropdown');
             const btn = document.getElementById('contactsBtn');
@@ -689,7 +675,6 @@
             }
         });
 
-        /* Рендер новостей */
         function renderNews() {
             const container = document.getElementById('news-container');
             if (!container) return;
@@ -716,7 +701,6 @@
             });
         }
 
-        /* Горизонтальный скролл галереи */
         const galleryElement = document.getElementById('detail-gallery');
         galleryElement.addEventListener('wheel', (e) => {
             e.preventDefault();
@@ -732,7 +716,33 @@
             }
         }
 
-        /* Рендер карточек с обложкой */
+        /* Автоматический скан папки на наличие скриншотов (1.webp, 2.webp, 3.webp...) */
+        async function getProjectScreenshots(id) {
+            const screenshots = [];
+            let index = 1;
+            const maxLimit = 25; // Предохранитель от бесконечного цикла
+
+            while (index <= maxLimit) {
+                const imgUrl = `Screenshots/${id}/${index}.webp`;
+                try {
+                    const response = await fetch(imgUrl, { method: 'HEAD' });
+                    const contentType = response.headers.get('content-type') || '';
+
+                    // Проверяем, что файл существует и это действительно картинка, а не SPA-перенаправление
+                    if (response.ok && !contentType.includes('text/html')) {
+                        screenshots.push(imgUrl);
+                        index++;
+                    } else {
+                        break; // Файлы закончились
+                    }
+                } catch (err) {
+                    break;
+                }
+            }
+            return screenshots;
+        }
+
+        /* Рендер списка проектов (с автоматическим путем к cover.webp) */
         function renderProjects() {
             const container = document.getElementById('projects-container');
             container.innerHTML = '';
@@ -743,6 +753,7 @@
                 card.onclick = () => openDetails(p.id);
 
                 const statusClass = p.status === 'dev' ? 'dev' : 'done';
+                const coverUrl = `Screenshots/${p.id}/cover.webp`;
 
                 const tagsHtml = p.tags && p.tags.length > 0
                     ? `<div class="card-tags">
@@ -751,7 +762,7 @@
                     : '';
 
                 card.innerHTML = `
-                    <img src="${p.cover}" class="project-img" alt="${p.title}">
+                    <img src="${coverUrl}" class="project-img" loading="lazy" alt="${p.title}" onerror="this.onerror=null; this.src='https://placehold.co/600x400/161b26/94a3b8?text=No+Cover';">
                     <div class="project-info">
                         <h3 style="margin: 0;">${p.title}</h3>
                         <span class="status ${statusClass}">${p.statusText}</span>
@@ -763,8 +774,8 @@
             });
         }
 
-        /* Страница деталей со скриншотами и видео */
-        function openDetails(id) {
+        /* Страница деталей с динамическим поиском скриншотов */
+        async function openDetails(id) {
             const project = siteData.projects.find(p => p.id === id);
             if (!project) return;
 
@@ -795,12 +806,11 @@
                 }
             }
 
-            // 2. Отрисовка скриншотов
-            if (project.screenshots && project.screenshots.length > 0) {
-                project.screenshots.forEach(imgUrl => {
-                    gallery.innerHTML += `<img src="${imgUrl}" class="gallery-img" alt="${project.title}">`;
-                });
-            }
+            // 2. Автоматический поиск и отрисовка скриншотов из папки Screenshots/{id}/
+            const screenshots = await getProjectScreenshots(id);
+            screenshots.forEach(imgUrl => {
+                gallery.innerHTML += `<img src="${imgUrl}" class="gallery-img" loading="lazy" alt="${project.title}">`;
+            });
 
             const linksContainer = document.getElementById('detail-links');
             linksContainer.innerHTML = '';
