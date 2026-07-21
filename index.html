@@ -86,6 +86,31 @@
             -webkit-text-fill-color: transparent;
         }
 
+        .header-nav {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nav-btn {
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid transparent;
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+
+        .nav-btn:hover {
+            color: var(--text-main);
+            background: rgba(255, 255, 255, 0.05);
+            border-color: var(--border-color);
+        }
+
         .container {
             max-width: 1140px;
             margin: 0 auto;
@@ -329,6 +354,73 @@
         }
 
         .project-info h3 { font-size: 1.25rem; font-weight: 700; letter-spacing: -0.3px; }
+
+        /* Стили страницы резюме */
+        .resume-container {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .resume-header h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 6px;
+            letter-spacing: -0.5px;
+        }
+
+        .resume-subtitle {
+            color: var(--primary-color);
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .resume-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .resume-card {
+            background: var(--surface-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 28px;
+        }
+
+        .resume-card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--text-main);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        .resume-card p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            font-size: 15px;
+        }
+
+        .resume-item {
+            margin-top: 12px;
+        }
+
+        .resume-item h4 {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 4px;
+        }
+
+        .resume-date {
+            font-size: 12px;
+            color: var(--primary-color);
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 8px;
+        }
 
         /* Статусы */
         .status { 
@@ -740,6 +832,7 @@
 
         @media (max-width: 768px) {
             header { padding: 16px 20px; }
+            .nav-btn { padding: 6px 12px; font-size: 13px; }
             .container { padding: 30px 16px; }
             #page-home h1 { font-size: 2.4em !important; }
             .details-header { flex-direction: column; }
@@ -759,6 +852,10 @@
         <div class="logo" onclick="navigate('page-home')">
             <span class="part-signa">Signa</span><span class="part-inc">Inc</span>
         </div>
+        <nav class="header-nav">
+            <button class="nav-btn" onclick="navigate('page-projects')">Проекты</button>
+            <button class="nav-btn" onclick="navigate('page-resume')">Резюме</button>
+        </nav>
     </header>
 
     <div class="container">
@@ -783,6 +880,58 @@
             
             <h2 style="margin-bottom: 20px;">Мои проекты</h2>
             <div class="projects-grid" id="projects-container"></div>
+        </div>
+
+        <!-- Страница Резюме -->
+        <div id="page-resume" class="page">
+            <button class="btn-secondary" onclick="navigate('page-home')">Назад на главную</button>
+            
+            <div class="resume-container">
+                <div class="resume-header">
+                    <h1>Резюме</h1>
+                    <p class="resume-subtitle">Unity / C# / Mobile & Web Developer</p>
+                </div>
+
+                <div class="resume-grid">
+                    <div class="resume-card">
+                        <h3>Обо мне</h3>
+                        <p>Разработчик с опытом создания мобильных приложений, WebGL проектов и ПК-игр. Специализируюсь на Unity, C#, архитектурных паттернах, оптимизации производительности и полном цикле разработки от прототипа до релиза.</p>
+                    </div>
+
+                    <div class="resume-card">
+                        <h3>Ключевые навыки</h3>
+                        <div class="tech-stack" style="margin: 8px 0 0 0;">
+                            <span class="tech-tag">C# / Unity</span>
+                            <span class="tech-tag">Flutter / Dart</span>
+                            <span class="tech-tag">TypeScript</span>
+                            <span class="tech-tag">WebGL & Mobile (iOS/Android)</span>
+                            <span class="tech-tag">Zenject / Addressables</span>
+                            <span class="tech-tag">REST API / Git</span>
+                        </div>
+                    </div>
+
+                    <div class="resume-card">
+                        <h3>Опыт и достижения</h3>
+                        <div class="resume-item">
+                            <h4>Разработка коммерческих и независимых проектов</h4>
+                            <span class="resume-date">2023 — Настоящее время</span>
+                            <p>Проектирование и публикация приложений и игр (Armchair, Idle Garden Farm, Echo of Flight 817, Flutter PWA утилита для отслеживания). Опыт работы над симуляторами, 2D/3D механиками и интеграцией сервисов.</p>
+                        </div>
+                        <div class="resume-item" style="margin-top: 16px;">
+                            <h4>Преподавание и менторство</h4>
+                            <p>Организация и проведение практических обучающих интенсивов по разработке на Unity, исполнение роли Team Lead в проектных командах.</p>
+                        </div>
+                    </div>
+
+                    <div class="resume-card">
+                        <h3>Образование</h3>
+                        <div class="resume-item">
+                            <h4>Разработка программного обеспечения</h4>
+                            <p>Колледж цифровых технологий Академии TOP</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div id="page-details" class="page">
@@ -810,7 +959,8 @@
 
         <div class="footer-actions">
             <a href="https://t.me/Signa_Inc" target="_blank" class="btn-telegram-channel">
-                <path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/>
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/>
                 </svg>
                 Telegram Канал
             </a>
@@ -1138,7 +1288,7 @@
                 });
             } else {
                 const coverUrl = `Screenshots/${id}/cover.webp`;
-                gallery.innerHTML += `<img src="${coverUrl}" class="gallery-img" loading="lazy" alt="${project.title}" onerror="this.onerror=null; this.src='https://placehold.co/600x400/161b26/94a3b8?text=Скриншоты+скоро+появятся';">`;
+                gallery.innerHTML += `<img src="${coverUrl}" class="gallery-img" loading="lazy" alt="${project.title}" onerror="this.onerror=null; this.src='https://placehold.co/600x400/161b26/94a3b8?text=Скриншоты+скоро+появится';">`;
             }
 
             const linksContainer = document.getElementById('detail-links');
