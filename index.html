@@ -173,6 +173,28 @@
             transform: translateX(-3px);
         }
 
+        /* Стиль для кнопки Резюме на главной */
+        .home-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .btn-resume {
+            background: rgba(168, 85, 247, 0.1);
+            color: var(--text-main);
+            border: 1px solid var(--primary-color);
+            backdrop-filter: blur(8px);
+        }
+
+        .btn-resume:hover {
+            background: rgba(168, 85, 247, 0.22);
+            color: #ffffff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 18px var(--primary-glow);
+        }
+
         .btn-buy { 
             background: var(--btn-buy); 
             color: white; 
@@ -486,6 +508,10 @@
             transition: border-color 0.3s;
         }
 
+        .gallery-img {
+            cursor: pointer;
+        }
+
         .gallery-img:hover, .gallery-video:hover { border-color: rgba(255, 255, 255, 0.2); }
 
         .details-info { 
@@ -521,6 +547,48 @@
             border-color: var(--primary-color);
             color: #ffffff;
             transform: translateY(-2px);
+        }
+
+        /* --- Модальное окно полноэкранного просмотра скриншотов --- */
+        .lightbox-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(11, 13, 18, 0.88);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            cursor: zoom-out;
+            padding: 20px;
+        }
+
+        .lightbox-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .lightbox-img {
+            max-width: 92%;
+            max-height: 92vh;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 30px var(--primary-glow);
+            object-fit: contain;
+            cursor: default;
+            transform: scale(0.96);
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .lightbox-overlay.active .lightbox-img {
+            transform: scale(1);
         }
 
         /* Подвал */
@@ -866,7 +934,10 @@
 
             <div class="tech-stack" id="tech-stack-container"></div>
 
-            <button class="btn-primary" onclick="navigate('page-projects')">Смотреть все проекты</button>
+            <div class="home-actions">
+                <button class="btn-primary" onclick="navigate('page-projects')">Смотреть все проекты</button>
+                <button class="btn-resume" onclick="navigate('page-resume')">Резюме</button>
+            </div>
 
             <!-- Блок Анонсов и Релизов -->
             <div class="announcements-section">
@@ -959,9 +1030,6 @@
 
         <div class="footer-actions">
             <a href="https://t.me/Signa_Inc" target="_blank" class="btn-telegram-channel">
-                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/>
-                </svg>
                 Telegram Канал
             </a>
 
@@ -983,6 +1051,11 @@
             </div>
         </div>
     </footer>
+
+    <!-- Модальное окно просмотра скриншотов на весь экран (Lightbox) -->
+    <div class="lightbox-overlay" id="lightboxModal" onclick="closeLightbox()">
+        <img class="lightbox-img" id="lightboxImg" src="" alt="Скриншот" onclick="event.stopPropagation()">
+    </div>
 
     <!-- Модальное окно обращения по Email -->
     <div class="modal-overlay" id="feedbackModal" onclick="closeModalOnOverlay(event)">
@@ -1094,13 +1167,11 @@
         function openFeedbackModal(event) {
             if (event) event.preventDefault();
             
-            // Закрываем выпадающее меню контактов
             const dropdown = document.getElementById('contactsDropdown');
             const btn = document.getElementById('contactsBtn');
             if (dropdown) dropdown.classList.remove('show');
             if (btn) btn.classList.remove('active');
 
-            // Показываем модальное окно
             const modal = document.getElementById('feedbackModal');
             modal.classList.add('active');
             document.body.style.overflow = 'hidden';
@@ -1118,14 +1189,67 @@
             }
         }
 
-        // Закрытие по клавише Escape
+        /* --- Управление полноэкранным просмотром скриншотов (Lightbox) --- */
+        function openLightbox(src) {
+            const lightbox = document.getElementById('lightboxModal');
+            const lightboxImg = document.getElementById('lightboxImg');
+            lightboxImg.src = src;
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            const lightbox = document.getElementById('lightboxModal');
+            lightbox.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        /* --- Возврат назад по страницам --- */
+        function goBack() {
+            const lightbox = document.getElementById('lightboxModal');
+            const feedbackModal = document.getElementById('feedbackModal');
+
+            // Если открыто модальное окно или просмотр фото — сначала закрываем его
+            if (lightbox && lightbox.classList.contains('active')) {
+                closeLightbox();
+                return;
+            }
+            if (feedbackModal && feedbackModal.classList.contains('active')) {
+                closeFeedbackModal();
+                return;
+            }
+
+            // Навигация назад по страницам
+            const activePage = document.querySelector('.page.active');
+            if (!activePage) return;
+
+            const activeId = activePage.id;
+
+            if (activeId === 'page-details') {
+                navigate('page-projects');
+            } else if (activeId === 'page-projects' || activeId === 'page-resume') {
+                navigate('page-home');
+            }
+        }
+
+        /* Обработчик горячих клавиш (Escape и Backspace) */
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 closeFeedbackModal();
+                closeLightbox();
+            } else if (e.key === 'Backspace') {
+                // Игнорируем Backspace, если пользователь печатает в тексте (input / textarea)
+                const targetTag = e.target.tagName.toLowerCase();
+                if (targetTag === 'input' || targetTag === 'textarea' || e.target.isContentEditable) {
+                    return;
+                }
+
+                e.preventDefault(); // Предотвращаем стандартный переход браузера
+                goBack();
             }
         });
 
-        // Функция копирования почты в буфер обмена с подтверждающей анимацией
+        // Функция копирования почты в буфер обмена
         function copyEmail() {
             const email = 'signainc.dev@gmail.com';
             navigator.clipboard.writeText(email).then(() => {
@@ -1190,11 +1314,11 @@
             }
         }
 
-        /* Автоматический скан папки на наличие скриншотов (1.webp, 2.webp, 3.webp...) */
+        /* Автоматический скан папки на наличие скриншотов */
         async function getProjectScreenshots(id) {
             const screenshots = [];
             let index = 1;
-            const maxLimit = 25; // Предохранитель от бесконечного цикла
+            const maxLimit = 25;
 
             while (index <= maxLimit) {
                 const imgUrl = `Screenshots/${id}/${index}.webp`;
@@ -1215,7 +1339,7 @@
             return screenshots;
         }
 
-        /* Рендер списка проектов (с автоматическим путем к cover.webp) */
+        /* Рендер списка проектов */
         function renderProjects() {
             const container = document.getElementById('projects-container');
             container.innerHTML = '';
@@ -1247,7 +1371,7 @@
             });
         }
 
-        /* Страница деталей с динамическим поиском скриншотов */
+        /* Страница деталей проекта */
         async function openDetails(id) {
             const project = siteData.projects.find(p => p.id === id);
             if (!project) return;
@@ -1284,11 +1408,11 @@
             const screenshots = await getProjectScreenshots(id);
             if (screenshots.length > 0) {
                 screenshots.forEach(imgUrl => {
-                    gallery.innerHTML += `<img src="${imgUrl}" class="gallery-img" loading="lazy" alt="${project.title}">`;
+                    gallery.innerHTML += `<img src="${imgUrl}" class="gallery-img" loading="lazy" alt="${project.title}" onclick="openLightbox('${imgUrl}')">`;
                 });
             } else {
                 const coverUrl = `Screenshots/${id}/cover.webp`;
-                gallery.innerHTML += `<img src="${coverUrl}" class="gallery-img" loading="lazy" alt="${project.title}" onerror="this.onerror=null; this.src='https://placehold.co/600x400/161b26/94a3b8?text=Скриншоты+скоро+появится';">`;
+                gallery.innerHTML += `<img src="${coverUrl}" class="gallery-img" loading="lazy" alt="${project.title}" onclick="openLightbox('${coverUrl}')" onerror="this.onerror=null; this.src='https://placehold.co/600x400/161b26/94a3b8?text=Скриншоты+скоро+появится';">`;
             }
 
             const linksContainer = document.getElementById('detail-links');
