@@ -86,19 +86,6 @@
             -webkit-text-fill-color: transparent;
         }
 
-        .nav-links { display: flex; gap: 16px; }
-
-        .nav-link {
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: color 0.2s;
-        }
-
-        .nav-link:hover { color: var(--text-main); }
-
         .container {
             max-width: 1140px;
             margin: 0 auto;
@@ -214,6 +201,36 @@
             color: var(--text-secondary);
         }
 
+        /* Теги на карточках проектов */
+        .card-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: auto;
+            padding-top: 10px;
+        }
+
+        .card-tag {
+            font-size: 11px;
+            padding: 3px 8px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-secondary);
+        }
+
+        /* Краткое описание проекта в карточке */
+        .project-card-desc {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            margin-top: 4px;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
         /* Блок Анонсов и Релизов */
         .announcements-section {
             margin-top: 50px;
@@ -250,7 +267,6 @@
         .news-title { font-size: 1rem; font-weight: 700; margin-bottom: 8px; }
         .news-text { font-size: 14px; color: var(--text-secondary); line-height: 1.5; margin-bottom: 16px; }
 
-        /* Кнопка ссылки в новостях */
         .news-link-btn {
             display: inline-flex;
             align-items: center;
@@ -266,15 +282,6 @@
         .news-link-btn:hover {
             color: #c084fc;
             transform: translateX(2px);
-        }
-
-        /* Состояние: неактивная ссылка */
-        .news-link-btn.disabled {
-            color: var(--text-secondary);
-            opacity: 0.4;
-            cursor: not-allowed;
-            pointer-events: none;
-            user-select: none;
         }
 
         /* Сетка карточек проектов */
@@ -317,7 +324,7 @@
             padding: 24px; 
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 10px;
             flex-grow: 1;
         }
 
@@ -375,7 +382,8 @@
             border-radius: 10px;
         }
 
-        .gallery-img { 
+        /* Единый стиль для карточек медиа в галерее */
+        .gallery-img, .gallery-video { 
             width: 420px; 
             height: 260px; 
             background: #1a1f2c; 
@@ -386,7 +394,7 @@
             transition: border-color 0.3s;
         }
 
-        .gallery-img:hover { border-color: rgba(255, 255, 255, 0.2); }
+        .gallery-img:hover, .gallery-video:hover { border-color: rgba(255, 255, 255, 0.2); }
 
         .details-info { 
             flex: 1; 
@@ -423,11 +431,11 @@
             transform: translateY(-2px);
         }
 
-        /* Подвал */
+        /* Подвал и элементы управления */
         footer {
             margin-top: auto;
             border-top: 1px solid var(--border-color);
-            padding: 30px 40px;
+            padding: 24px 40px;
             background: rgba(11, 13, 18, 0.6);
             display: flex;
             justify-content: space-between;
@@ -438,16 +446,93 @@
 
         .footer-info { font-size: 14px; color: var(--text-secondary); }
 
-        .footer-socials { display: flex; gap: 16px; }
-
-        .footer-socials a {
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-size: 14px;
-            transition: color 0.2s;
+        .footer-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
         }
 
-        .footer-socials a:hover { color: var(--primary-color); }
+        .btn-contacts, .btn-telegram-channel {
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.25s ease;
+            font-family: inherit;
+        }
+
+        .btn-contacts:hover, .btn-contacts.active,
+        .btn-telegram-channel:hover {
+            background: rgba(168, 85, 247, 0.15);
+            border-color: var(--primary-color);
+            box-shadow: 0 4px 15px var(--primary-glow);
+            transform: translateY(-2px);
+            color: #ffffff;
+        }
+
+        .footer-contacts-wrapper {
+            position: relative;
+        }
+
+        .contacts-dropdown {
+            position: absolute;
+            bottom: calc(100% + 12px);
+            right: 0;
+            background: #161b26;
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            min-width: 220px;
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5), 0 0 20px var(--primary-glow);
+            backdrop-filter: blur(16px);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(8px) scale(0.96);
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 200;
+        }
+
+        .contacts-dropdown.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0) scale(1);
+        }
+
+        .contacts-dropdown a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+            color: var(--text-main);
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .contacts-dropdown a:hover {
+            background: rgba(168, 85, 247, 0.15);
+            color: #ffffff;
+        }
+
+        .contacts-dropdown svg, .btn-telegram-channel svg {
+            width: 16px;
+            height: 16px;
+            stroke: var(--primary-color);
+        }
 
         @media (max-width: 768px) {
             header { padding: 16px 20px; }
@@ -455,8 +540,9 @@
             #page-home h1 { font-size: 2.4em !important; }
             .details-header { flex-direction: column; }
             .details-gallery, .details-info { width: 100%; }
-            .gallery-img { width: 100%; height: 220px; }
+            .gallery-img, .gallery-video { width: 100%; height: 220px; }
             footer { padding: 20px; flex-direction: column; align-items: flex-start; }
+            .contacts-dropdown { right: auto; left: 0; }
         }
     </style>
 </head>
@@ -471,21 +557,10 @@
     <div class="container">
         
         <div id="page-home" class="page active">
-            <h1 style="font-size: 3em; margin-bottom: 10px;">Unity Game Developer</h1>
-            <p style="color: var(--text-secondary); font-size: 1.15em; margin-bottom: 20px;">
-                Создаю игры и цифровые сервисы полного цикла: от проектирования UI-архитектуры и оптимизации до финального релиза под Mobile и WebGL.
-            </p>
+            <h1 id="home-title" style="font-size: 3em; margin-bottom: 10px;"></h1>
+            <p id="home-desc" style="color: var(--text-secondary); font-size: 1.15em; margin-bottom: 20px;"></p>
 
-            <div class="tech-stack">
-                <span class="tech-tag">Unity</span>
-                <span class="tech-tag">C#</span>
-                <span class="tech-tag">Flutter</span>
-                <span class="tech-tag">Dart</span>
-                <span class="tech-tag">WebGL</span>
-                <span class="tech-tag">Mobile (Android/iOS)</span>
-                <span class="tech-tag">UI Architecture</span>
-                <span class="tech-tag">Optimization</span>
-            </div>
+            <div class="tech-stack" id="tech-stack-container"></div>
 
             <button class="btn-primary" onclick="navigate('page-projects')">Смотреть все проекты</button>
 
@@ -497,19 +572,20 @@
         </div>
 
         <div id="page-projects" class="page">
-            <button class="btn-secondary" onclick="navigate('page-home')">← Назад на главную</button>
+            <button class="btn-secondary" onclick="navigate('page-home')">Назад на главную</button>
             
             <h2 style="margin-bottom: 20px;">Мои проекты</h2>
             <div class="projects-grid" id="projects-container"></div>
         </div>
 
         <div id="page-details" class="page">
-            <button class="btn-secondary" onclick="navigate('page-projects')">← Назад к проектам</button>
+            <button class="btn-secondary" onclick="navigate('page-projects')">Назад к проектам</button>
             <div class="details-header">
                 <div class="details-gallery" id="detail-gallery"></div>
                 <div class="details-info">
                     <h1 id="detail-title" style="margin-bottom: 10px;">Название игры</h1>
                     <span id="detail-status" class="status">Статус</span>
+
                     <p id="detail-desc" style="color: var(--text-secondary); margin-top: 20px; line-height: 1.6;"></p>
                     
                     <div class="links" id="detail-links"></div>
@@ -524,89 +600,106 @@
         <div class="footer-info">
             © 2026 SignaInc
         </div>
-        <div class="footer-socials">
-            <a href="https://t.me/Signa_Inc" target="_blank">Telegram Канал</a>
-            <!-- Исправленная ссылка на открывание письма в Gmail -->
-            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=contact@signainc.ru" target="_blank">Email</a>
+
+        <div class="footer-actions">
+            <!-- Отдельная кнопка Телеграм Канала -->
+            <a href="https://t.me/Signa_Inc" target="_blank" class="btn-telegram-channel">
+                <path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+                Telegram Канал
+            </a>
+
+            <!-- Выпадающее меню Контактов (Личка + Email) -->
+            <div class="footer-contacts-wrapper">
+                <button class="btn-contacts" id="contactsBtn" onclick="toggleContacts(event)">
+                    Контакты
+                </button>
+                <div class="contacts-dropdown" id="contactsDropdown">
+                    <a href="https://t.me/ваш_логин" target="_blank">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+                        Telegram
+                    </a>
+                    <a href="https://mail.google.com/mail/?view=cm&fs=1&to=contact@signainc.ru" target="_blank">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                        Email
+                    </a>
+                </div>
+            </div>
         </div>
     </footer>
 
     <script>
-        // Массив новостей (сюда можно будет делать fetch из API вашего Telegram-бота)
-        const news = [
-            {
-                id: 1,
-                date: "Июль 2026",
-                title: "Sajdah Helper — Web-версия для iOS",
-                text: "Запустили веб-версию приложения для пользователей iOS без необходимости установки из сторов.",
-                url: "https://t.me/Signa_Inc/3" // Активная ссылка
-            },
-            {
-                id: 2,
-                date: "В разработке",
-                title: "Эхо Рейса 817",
-                text: "Активно тестируем механики турбулентности и планирование атмосферных локаций ПК-хоррора.",
-                url: null // Ссылки нет -> кнопка будет неактивной
-            }
-        ];
+        // Глобальное хранилище загруженных данных
+        let siteData = {
+            profile: {},
+            news: [],
+            projects: []
+        };
 
-        const projects = [
-            {
-                id: 1,
-                title: "Sajdah Helper",
-                status: "dev",
-                statusText: "В разработке",
-                description: "Инновационное Android-приложение, разработанное на Flutter, которое помогает мусульманам безошибочно контролировать количество совершенных суджудов и ракаатов во время молитвы. Используя фронтальную камеру устройства и алгоритмы сравнения кадров, приложение отслеживает движения в реальном времени без необходимости прикасаться к экрану.",
-                images: ["https://placehold.co/600x400/2a2a35/FFFFFF?text=Sajdah+Helper+Screen+1", "https://placehold.co/600x400/2a2a35/FFFFFF?text=Sajdah+Helper+Screen+2"],
-                links: [
-                    { name: "Скачать с RuStore", url: "https://www.rustore.ru/catalog/app/com.darkframe.sajdah_helper" },
-                    { name: "Открыть Web-версию (iOS)", url: "/Sajdah Helper iOS/" }
-                ],
-                price: null
-            },
-            {
-                id: 3,
-                title: "Эхо Рейса 817",
-                status: "dev",
-                statusText: "В разработке",
-                description: "Сюжетный психологический хоррор на ПК.",
-                images: ["https://placehold.co/600x400/2a2a35/FFFFFF?text=Echo+Of+Flight+817"],
-                links: [],
-                price: null
-            },
-            {
-                id: 2,
-                title: "Still",
-                status: "done",
-                statusText: "Релиз",
-                description: "Проект, разработанный специально для game jam на платформе itch.io.",
-                images: ["https://placehold.co/600x400/2a2a35/FFFFFF?text=Still+Gameplay"],
-                links: [
-                    { name: "itch.io", url: "https://dark-frame.itch.io/still" }
-                ],
-                price: null
+        /* Загрузка данных из JSON файла */
+        async function loadSiteData() {
+            try {
+                const response = await fetch('data.json');
+                if (!response.ok) throw new Error('Ошибка сети при загрузке JSON');
+                siteData = await response.json();
+                
+                renderProfile();
+                renderNews();
+            } catch (error) {
+                console.error('Не удалось загрузить данные:', error);
             }
-        ];
+        }
 
-        /* Первоначальная отрисовка элементов */
+        /* Заполнение информации о профиле */
+        function renderProfile() {
+            if (!siteData.profile) return;
+
+            document.getElementById('home-title').innerText = siteData.profile.heading || '';
+            document.getElementById('home-desc').innerText = siteData.profile.description || '';
+
+            const techContainer = document.getElementById('tech-stack-container');
+            techContainer.innerHTML = '';
+            if (siteData.profile.techStack) {
+                siteData.profile.techStack.forEach(tech => {
+                    techContainer.innerHTML += `<span class="tech-tag">${tech}</span>`;
+                });
+            }
+        }
+
+        /* Инициализация при старте */
         document.addEventListener('DOMContentLoaded', () => {
-            renderNews();
+            loadSiteData();
         });
 
-        /* Рендер списка новостей */
-        /* Рендер списка новостей */
+        /* Переключение всплывающего меню контактов */
+        function toggleContacts(event) {
+            event.stopPropagation();
+            const dropdown = document.getElementById('contactsDropdown');
+            const btn = document.getElementById('contactsBtn');
+            dropdown.classList.toggle('show');
+            btn.classList.toggle('active');
+        }
+
+        /* Закрытие меню контактов при клике вне его */
+        document.addEventListener('click', (event) => {
+            const dropdown = document.getElementById('contactsDropdown');
+            const btn = document.getElementById('contactsBtn');
+            if (dropdown && !dropdown.contains(event.target) && !btn.contains(event.target)) {
+                dropdown.classList.remove('show');
+                btn.classList.remove('active');
+            }
+        });
+
+        /* Рендер новостей */
         function renderNews() {
             const container = document.getElementById('news-container');
             if (!container) return;
             container.innerHTML = '';
 
-            news.forEach(item => {
+            siteData.news.forEach(item => {
                 const card = document.createElement('div');
                 card.className = 'news-card';
 
                 const hasLink = item.url && item.url.trim() !== '';
-                
-                // Генерируем HTML для кнопки только если ссылка реально существует
                 const linkHtml = hasLink 
                     ? `<a class="news-link-btn" href="${item.url}" target="_blank">Подробнее</a>` 
                     : '';
@@ -639,30 +732,40 @@
             }
         }
 
+        /* Рендер карточек с обложкой */
         function renderProjects() {
             const container = document.getElementById('projects-container');
             container.innerHTML = '';
 
-            projects.forEach(p => {
+            siteData.projects.forEach(p => {
                 const card = document.createElement('div');
                 card.className = 'project-card';
                 card.onclick = () => openDetails(p.id);
 
                 const statusClass = p.status === 'dev' ? 'dev' : 'done';
 
+                const tagsHtml = p.tags && p.tags.length > 0
+                    ? `<div class="card-tags">
+                        ${p.tags.map(tag => `<span class="card-tag">${tag}</span>`).join('')}
+                       </div>`
+                    : '';
+
                 card.innerHTML = `
-                    <img src="${p.images[0]}" class="project-img" alt="${p.title}">
+                    <img src="${p.cover}" class="project-img" alt="${p.title}">
                     <div class="project-info">
-                        <h3 style="margin: 0 0 10px 0;">${p.title}</h3>
+                        <h3 style="margin: 0;">${p.title}</h3>
                         <span class="status ${statusClass}">${p.statusText}</span>
+                        <p class="project-card-desc">${p.shortDescription}</p>
+                        ${tagsHtml}
                     </div>
                 `;
                 container.appendChild(card);
             });
         }
 
+        /* Страница деталей со скриншотами и видео */
         function openDetails(id) {
-            const project = projects.find(p => p.id === id);
+            const project = siteData.projects.find(p => p.id === id);
             if (!project) return;
 
             document.getElementById('detail-title').innerText = project.title;
@@ -670,14 +773,34 @@
             const statusEl = document.getElementById('detail-status');
             statusEl.innerText = project.statusText;
             statusEl.className = `status ${project.status === 'dev' ? 'dev' : 'done'}`;
-            
-            document.getElementById('detail-desc').innerText = project.description;
+
+            document.getElementById('detail-desc').innerText = project.fullDescription;
 
             const gallery = document.getElementById('detail-gallery');
             gallery.innerHTML = '';
-            project.images.forEach(imgUrl => {
-                gallery.innerHTML += `<img src="${imgUrl}" class="gallery-img">`;
-            });
+            
+            // 1. Отрисовка видео
+            if (project.video && project.video.trim() !== '') {
+                if (project.video.includes('youtube.com') || project.video.includes('youtu.be')) {
+                    gallery.innerHTML += `
+                        <iframe class="gallery-video" src="${project.video}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    `;
+                } else {
+                    gallery.innerHTML += `
+                        <video class="gallery-video" controls preload="metadata">
+                            <source src="${project.video}">
+                            Ваш браузер не поддерживает видео.
+                        </video>
+                    `;
+                }
+            }
+
+            // 2. Отрисовка скриншотов
+            if (project.screenshots && project.screenshots.length > 0) {
+                project.screenshots.forEach(imgUrl => {
+                    gallery.innerHTML += `<img src="${imgUrl}" class="gallery-img" alt="${project.title}">`;
+                });
+            }
 
             const linksContainer = document.getElementById('detail-links');
             linksContainer.innerHTML = '';

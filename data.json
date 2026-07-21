@@ -1,0 +1,90 @@
+{
+  "profile": {
+    "heading": "Unity Game Developer",
+    "description": "Создаю игры и цифровые сервисы полного цикла: от проектирования UI-архитектуры и оптимизации до финального релиза под Mobile и WebGL.",
+    "techStack": [
+      "Unity",
+      "C#",
+      "Flutter",
+      "Dart",
+      "WebGL",
+      "Mobile (Android/iOS)",
+      "UI Architecture",
+      "Optimization"
+    ]
+  },
+  "news": [
+    {
+      "id": 1,
+      "date": "Июль 2026",
+      "title": "Sajdah Helper — Web-версия для iOS",
+      "text": "Запустили веб-версию приложения для пользователей iOS без необходимости установки из сторов.",
+      "url": "https://t.me/Signa_Inc/3"
+    },
+    {
+      "id": 2,
+      "date": "В разработке",
+      "title": "Эхо Рейса 817",
+      "text": "Активно тестируем механики турбулентности и планирование атмосферных локаций ПК-хоррора.",
+      "url": null
+    }
+  ],
+  "projects": [
+    {
+      "id": 1,
+      "title": "Sajdah Helper",
+      "status": "dev",
+      "statusText": "В разработке",
+      "tags": ["Flutter", "Dart", "Computer Vision", "Android", "PWA / Web"],
+      "cover": "https://placehold.co/600x400/1e1b4b/a855f7?text=Sajdah+Helper+COVER",
+      "video": null,
+      "screenshots": [
+        "https://placehold.co/600x400/2a2a35/FFFFFF?text=Screenshot+1",
+        "https://placehold.co/600x400/2a2a35/FFFFFF?text=Screenshot+2"
+      ],
+      "shortDescription": "Умное мобильное приложение для автоматического отслеживания совершаемых ракаатов и суджудов через камеру устройства.",
+      "fullDescription": "Инновационное Android-приложение, разработанное на Flutter, которое помогает мусульманам безошибочно контролировать количество совершенных суджудов и ракаатов во время молитвы. Используя фронтальную камеру устройства и алгоритмы сравнения кадров, приложение отслеживает движения в реальном времени без необходимости прикасаться к экрану.",
+      "links": [
+        { "name": "Скачать с RuStore", "url": "https://www.rustore.ru/catalog/app/com.darkframe.sajdah_helper" },
+        { "name": "Открыть Web-версию (iOS)", "url": "/Sajdah Helper iOS/" }
+      ],
+      "price": null
+    },
+    {
+      "id": 2,
+      "title": "Эхо Рейса 817",
+      "status": "dev",
+      "statusText": "В разработке",
+      "tags": ["Unity", "C#", "PC", "Atmospheric Horror"],
+      "cover": "https://placehold.co/600x400/0f172a/06b6d4?text=Echo+817+COVER",
+      "video": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+      "screenshots": [
+        "https://placehold.co/600x400/2a2a35/FFFFFF?text=Cockpit+Screenshot",
+        "https://placehold.co/600x400/2a2a35/FFFFFF?text=Cabin+Screenshot"
+      ],
+      "shortDescription": "Атмосферный ПК-хоррор о загадочном происшествии на борту пассажирского авиалайнера.",
+      "fullDescription": "Сюжетный психологический хоррор от первого лица для ПК. Игроку предстоит столкнуться с реалистичной физикой турбулентности, пугающими аномалиями и раскрыть тайну исчезновения экипажа во время ночного рейса.",
+      "links": [],
+      "price": null
+    },
+    {
+      "id": 3,
+      "title": "Still",
+      "status": "done",
+      "statusText": "Релиз",
+      "tags": ["Unity", "C#", "WebGL", "GameJam"],
+      "cover": "https://placehold.co/600x400/2e1065/e879f9?text=Still+COVER",
+      "video": null,
+      "screenshots": [
+        "https://placehold.co/600x400/2a2a35/FFFFFF?text=Gameplay+1",
+        "https://placehold.co/600x400/2a2a35/FFFFFF?text=Gameplay+2"
+      ],
+      "shortDescription": "Экспериментальный браузерный WebGL-проект, созданный в рамках джема на itch.io.",
+      "fullDescription": "Атмосферный короткометражный игровой проект, разработанный специально для международной платформы itch.io. Игра сфокусирована на передаче чувства изоляции, визуальном повествовании и проработке звукового пространства.",
+      "links": [
+        { "name": "itch.io", "url": "https://dark-frame.itch.io/still" }
+      ],
+      "price": null
+    }
+  ]
+}
