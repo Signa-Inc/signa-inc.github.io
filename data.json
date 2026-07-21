@@ -51,7 +51,7 @@
       "status": "dev",
       "statusText": "В разработке",
       "tags": ["Unity", "C#", "PC", "Atmospheric Horror"],
-      "video": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+      "video": null,
       "shortDescription": "Атмосферный ПК-хоррор о загадочном происшествии на борту пассажирского авиалайнера.",
       "fullDescription": "Сюжетный психологический хоррор от первого лица для ПК. Игроку предстоит столкнуться с реалистичной физикой турбулентности, пугающими аномалиями и раскрыть тайну исчезновения экипажа во время ночного рейса.",
       "links": [],
