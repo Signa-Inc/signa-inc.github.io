@@ -33,7 +33,7 @@
     },
     {
       "id": 2,
-      "title": "Эхо Рейса 817",
+      "title": "Echo Of Flight 817",
       "status": "dev",
       "statusText": "В разработке",
       "tags": ["Unity", "C#", "PC", "Atmospheric Horror"],

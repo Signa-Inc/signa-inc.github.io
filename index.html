@@ -1137,6 +1137,19 @@
     <script>
         let siteData = { news: [], projects: [] };
 
+        // Вспомогательная функция для превращения названия проекта в URL-slug
+        function slugify(text) {
+            return text
+                .toString()
+                .toLowerCase()
+                .trim()
+                .replace(/[\s_]+/g, '-')       // Заменяем пробелы и подчеркивания на дефисы
+                .replace(/[^\w\-]+/g, '')      // Удаляем все спецсимволы (оставляем буквы, цифры и дефисы)
+                .replace(/\-\-+/g, '-')        // Заменяем повторяющиеся дефисы на один
+                .replace(/^-+/, '')            // Удаляем дефис в начале
+                .replace(/-+$/, '');           // Удаляем дефис в конце
+        }
+
         async function loadSiteData() {
             try {
                 const response = await fetch('data.json');
@@ -1149,8 +1162,8 @@
                 if (window.location.hash) {
                     const hash = window.location.hash;
                     if (hash.startsWith('#project-')) {
-                        const projId = parseInt(hash.replace('#project-', ''));
-                        if (projId) openDetails(projId, false);
+                        const projSlug = decodeURIComponent(hash.replace('#project-', ''));
+                        if (projSlug) openDetails(projSlug, false);
                     } else if (hash === '#projects') {
                         navigate('page-projects', false);
                     } else if (hash === '#resume') {
@@ -1171,7 +1184,6 @@
             const lightbox = document.getElementById('lightboxModal');
             const feedbackModal = document.getElementById('feedbackModal');
 
-            // 1. Если открыты модальные окна — при жесте "Назад" сначала закрываем их
             if (lightbox && lightbox.classList.contains('active')) {
                 closeLightbox(true);
                 return;
@@ -1181,7 +1193,6 @@
                 return;
             }
 
-            // 2. Перемещение по страницам
             if (e.state && e.state.pageId) {
                 if (e.state.pageId === 'page-details' && e.state.projectId) {
                     openDetails(e.state.projectId, false);
@@ -1290,7 +1301,6 @@
             }
         }
 
-        /* Обработка клавиатуры (Escape/Backspace) */
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Backspace' || e.key === 'Escape') {
                 const targetTag = e.target.tagName.toLowerCase();
@@ -1324,7 +1334,6 @@
             });
         }
 
-        /* Рендер новостей с обновлённой кнопкой перехода */
         function renderNews() {
             const container = document.getElementById('news-container');
             if (!container) return;
@@ -1427,9 +1436,15 @@
             });
         }
 
-        async function openDetails(id, pushState = true) {
-            const project = siteData.projects.find(p => p.id === id);
+        // Обновленная функция открытия карточки (принимает либо ID, либо Slug)
+        async function openDetails(identifier, pushState = true) {
+            const project = siteData.projects.find(p => 
+                p.id === identifier || 
+                slugify(p.title) === identifier
+            );
             if (!project) return;
+
+            const projectSlug = slugify(project.title);
 
             document.getElementById('detail-title').innerText = project.title;
             
@@ -1458,13 +1473,13 @@
                 }
             }
 
-            const screenshots = await getProjectScreenshots(id);
+            const screenshots = await getProjectScreenshots(project.id);
             if (screenshots.length > 0) {
                 screenshots.forEach(imgUrl => {
                     gallery.innerHTML += `<img src="${imgUrl}" class="gallery-img" loading="lazy" alt="${project.title}" onclick="openLightbox('${imgUrl}')">`;
                 });
             } else {
-                const coverUrl = `Screenshots/${id}/cover.webp`;
+                const coverUrl = `Screenshots/${project.id}/cover.webp`;
                 gallery.innerHTML += `<img src="${coverUrl}" class="gallery-img" loading="lazy" alt="${project.title}" onclick="openLightbox('${coverUrl}')" onerror="this.onerror=null; this.src='https://placehold.co/600x400/161b26/94a3b8?text=Скриншоты+скоро+появится';">`;
             }
 
@@ -1486,7 +1501,7 @@
             window.scrollTo(0, 0);
 
             if (pushState) {
-                history.pushState({ pageId: 'page-details', projectId: id }, '', '#project-' + id);
+                history.pushState({ pageId: 'page-details', projectId: project.id }, '', '#project-' + projectSlug);
             }
         }
     </script>
