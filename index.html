@@ -173,7 +173,6 @@
             transform: translateX(-3px);
         }
 
-        /* Стиль для кнопки Резюме на главной */
         .home-actions {
             display: flex;
             align-items: center;
@@ -214,11 +213,11 @@
         #page-home { padding: 20px 0 40px; text-align: left; }
 
         #page-home h1 {
-            font-size: 3.5em !important;
+            font-size: 3.2em;
             font-weight: 800;
             letter-spacing: -1.5px;
             line-height: 1.1;
-            margin-bottom: 16px !important;
+            margin-bottom: 16px;
             background: linear-gradient(135deg, #ffffff 40%, #a855f7 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -228,6 +227,9 @@
             max-width: 650px;
             line-height: 1.6;
             font-weight: 400;
+            color: var(--text-secondary);
+            font-size: 1.15em;
+            margin-bottom: 20px;
         }
 
         /* Стек технологий */
@@ -248,7 +250,6 @@
             color: var(--text-secondary);
         }
 
-        /* Теги на карточках проектов */
         .card-tags {
             display: flex;
             flex-wrap: wrap;
@@ -266,7 +267,6 @@
             color: var(--text-secondary);
         }
 
-        /* Краткое описание проекта в карточке */
         .project-card-desc {
             font-size: 13px;
             color: var(--text-secondary);
@@ -278,7 +278,7 @@
             overflow: hidden;
         }
 
-        /* Блок Анонсов и Релизов */
+        /* Анонсы и Релизы */
         .announcements-section {
             margin-top: 50px;
             padding-top: 40px;
@@ -314,24 +314,45 @@
         .news-title { font-size: 1rem; font-weight: 700; margin-bottom: 8px; }
         .news-text { font-size: 14px; color: var(--text-secondary); line-height: 1.5; margin-bottom: 16px; }
 
+        /* Обновлённый стиль кнопки перехода в новостях */
         .news-link-btn {
             display: inline-flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
             font-size: 13px;
             font-weight: 600;
-            color: var(--primary-color);
+            color: var(--text-main);
+            background: rgba(168, 85, 247, 0.12);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            padding: 8px 16px;
+            border-radius: 8px;
             text-decoration: none;
             width: fit-content;
-            transition: all 0.2s ease;
+            transition: all 0.25s ease;
+            margin-top: 8px;
         }
 
         .news-link-btn:hover {
-            color: #c084fc;
-            transform: translateX(2px);
+            background: rgba(168, 85, 247, 0.25);
+            border-color: var(--primary-color);
+            color: #ffffff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 14px var(--primary-glow);
         }
 
-        /* Сетка карточек проектов */
+        .news-link-btn svg {
+            width: 15px;
+            height: 15px;
+            stroke: var(--primary-color);
+            transition: stroke 0.25s ease;
+            flex-shrink: 0;
+        }
+
+        .news-link-btn:hover svg {
+            stroke: #ffffff;
+        }
+
+        /* Проекты */
         .projects-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -377,7 +398,7 @@
 
         .project-info h3 { font-size: 1.25rem; font-weight: 700; letter-spacing: -0.3px; }
 
-        /* Стили страницы резюме */
+        /* Резюме */
         .resume-container {
             display: flex;
             flex-direction: column;
@@ -469,7 +490,7 @@
             border: 1px solid rgba(6, 182, 212, 0.3); 
         }
 
-        /* Страница деталей */
+        /* Детали */
         .details-header { 
             display: flex; 
             gap: 32px; 
@@ -496,7 +517,6 @@
             border-radius: 10px;
         }
 
-        /* Единый стиль для карточек медиа в галерее */
         .gallery-img, .gallery-video { 
             width: 420px; 
             height: 260px; 
@@ -508,10 +528,7 @@
             transition: border-color 0.3s;
         }
 
-        .gallery-img {
-            cursor: pointer;
-        }
-
+        .gallery-img { cursor: pointer; }
         .gallery-img:hover, .gallery-video:hover { border-color: rgba(255, 255, 255, 0.2); }
 
         .details-info { 
@@ -549,7 +566,7 @@
             transform: translateY(-2px);
         }
 
-        /* --- Модальное окно полноэкранного просмотра скриншотов --- */
+        /* Lightbox */
         .lightbox-overlay {
             position: fixed;
             top: 0;
@@ -693,7 +710,7 @@
             stroke: var(--primary-color);
         }
 
-        /* --- Модальное окно обращения по Email --- */
+        /* Модальное окно Email */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -775,7 +792,6 @@
             line-height: 1.5;
         }
 
-        /* Инфо-блок с адресом почты */
         .email-info-card {
             background: rgba(11, 13, 18, 0.7);
             border: 1px solid var(--border-color);
@@ -902,7 +918,7 @@
             header { padding: 16px 20px; }
             .nav-btn { padding: 6px 12px; font-size: 13px; }
             .container { padding: 30px 16px; }
-            #page-home h1 { font-size: 2.4em !important; }
+            #page-home h1 { font-size: 2.2em; }
             .details-header { flex-direction: column; }
             .details-gallery, .details-info { width: 100%; }
             .gallery-img, .gallery-video { width: 100%; height: 220px; }
@@ -928,11 +944,21 @@
 
     <div class="container">
         
+        <!-- Главная страница (Данные профиля встроенны напрямую) -->
         <div id="page-home" class="page active">
-            <h1 id="home-title" style="font-size: 3em; margin-bottom: 10px;"></h1>
-            <p id="home-desc" style="color: var(--text-secondary); font-size: 1.15em; margin-bottom: 20px;"></p>
+            <h1>Unity Game Developer</h1>
+            <p>Создаю игры и цифровые сервисы полного цикла: от проектирования UI-архитектуры и оптимизации до финального релиза под Mobile и WebGL.</p>
 
-            <div class="tech-stack" id="tech-stack-container"></div>
+            <div class="tech-stack">
+                <span class="tech-tag">Unity</span>
+                <span class="tech-tag">C#</span>
+                <span class="tech-tag">Flutter</span>
+                <span class="tech-tag">Dart</span>
+                <span class="tech-tag">WebGL</span>
+                <span class="tech-tag">Mobile (Android/iOS)</span>
+                <span class="tech-tag">UI Architecture</span>
+                <span class="tech-tag">Optimization</span>
+            </div>
 
             <div class="home-actions">
                 <button class="btn-primary" onclick="navigate('page-projects')">Смотреть все проекты</button>
@@ -1042,7 +1068,6 @@
                         <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
                         Telegram
                     </a>
-                    <!-- Вызов модального окна контактов -->
                     <a href="#" onclick="openFeedbackModal(event)">
                         <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
                         Email
@@ -1052,12 +1077,12 @@
         </div>
     </footer>
 
-    <!-- Модальное окно просмотра скриншотов на весь экран (Lightbox) -->
+    <!-- Lightbox просмотр скриншотов -->
     <div class="lightbox-overlay" id="lightboxModal" onclick="closeLightbox()">
         <img class="lightbox-img" id="lightboxImg" src="" alt="Скриншот" onclick="event.stopPropagation()">
     </div>
 
-    <!-- Модальное окно обращения по Email -->
+    <!-- Модальное окно Email -->
     <div class="modal-overlay" id="feedbackModal" onclick="closeModalOnOverlay(event)">
         <div class="modal-content">
             <button class="modal-close" onclick="closeFeedbackModal()" aria-label="Закрыть">
@@ -1070,7 +1095,6 @@
             <h3 class="modal-title">Связаться по Email</h3>
             <p class="modal-subtitle">Чтобы отправить нам сообщение, напишите прямо на наш почтовый адрес</p>
             
-            <!-- Инфо-блок с почтой -->
             <div class="email-info-card">
                 <div class="email-address-wrapper">
                     <svg class="email-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1088,7 +1112,6 @@
                 </button>
             </div>
 
-            <!-- Кнопки действий -->
             <div class="modal-actions">
                 <a href="mailto:signainc.dev@gmail.com" class="btn-modal-action btn-mailto">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1112,7 +1135,7 @@
     </div>
 
     <script>
-        let siteData = { profile: {}, news: [], projects: [] };
+        let siteData = { news: [], projects: [] };
 
         async function loadSiteData() {
             try {
@@ -1120,26 +1143,73 @@
                 if (!response.ok) throw new Error('Ошибка сети при загрузке JSON');
                 siteData = await response.json();
                 
-                renderProfile();
                 renderNews();
+
+                // Автоматическое восстановление состояния по Хэшу при старте
+                if (window.location.hash) {
+                    const hash = window.location.hash;
+                    if (hash.startsWith('#project-')) {
+                        const projId = parseInt(hash.replace('#project-', ''));
+                        if (projId) openDetails(projId, false);
+                    } else if (hash === '#projects') {
+                        navigate('page-projects', false);
+                    } else if (hash === '#resume') {
+                        navigate('page-resume', false);
+                    }
+                }
             } catch (error) {
                 console.error('Не удалось загрузить данные:', error);
             }
         }
 
-        function renderProfile() {
-            if (!siteData.profile) return;
+        /* --- Инициализация истории браузера и системного жеста "Назад" --- */
+        if (!history.state) {
+            history.replaceState({ pageId: 'page-home' }, '', window.location.hash || '#home');
+        }
 
-            document.getElementById('home-title').innerText = siteData.profile.heading || '';
-            document.getElementById('home-desc').innerText = siteData.profile.description || '';
+        window.addEventListener('popstate', (e) => {
+            const lightbox = document.getElementById('lightboxModal');
+            const feedbackModal = document.getElementById('feedbackModal');
 
-            const techContainer = document.getElementById('tech-stack-container');
-            techContainer.innerHTML = '';
-            if (siteData.profile.techStack) {
-                siteData.profile.techStack.forEach(tech => {
-                    techContainer.innerHTML += `<span class="tech-tag">${tech}</span>`;
-                });
+            // 1. Если открыты модальные окна — при жесте "Назад" сначала закрываем их
+            if (lightbox && lightbox.classList.contains('active')) {
+                closeLightbox(true);
+                return;
             }
+            if (feedbackModal && feedbackModal.classList.contains('active')) {
+                closeFeedbackModal(true);
+                return;
+            }
+
+            // 2. Перемещение по страницам
+            if (e.state && e.state.pageId) {
+                if (e.state.pageId === 'page-details' && e.state.projectId) {
+                    openDetails(e.state.projectId, false);
+                } else {
+                    navigate(e.state.pageId, false);
+                }
+            } else {
+                navigate('page-home', false);
+            }
+        });
+
+        function navigate(pageId, pushState = true) {
+            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+            
+            const targetPage = document.getElementById(pageId);
+            if (targetPage) {
+                targetPage.classList.add('active');
+            }
+
+            if(pageId === 'page-projects') {
+                renderProjects();
+            }
+
+            if (pushState) {
+                const hashName = pageId.replace('page-', '');
+                history.pushState({ pageId: pageId }, '', '#' + hashName);
+            }
+            window.scrollTo(0, 0);
         }
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -1163,7 +1233,7 @@
             }
         });
 
-        /* --- Управление модальным окном Email --- */
+        /* --- Модальное окно Email --- */
         function openFeedbackModal(event) {
             if (event) event.preventDefault();
             
@@ -1173,14 +1243,23 @@
             if (btn) btn.classList.remove('active');
 
             const modal = document.getElementById('feedbackModal');
+            if (modal.classList.contains('active')) return;
+
             modal.classList.add('active');
             document.body.style.overflow = 'hidden';
+            history.pushState({ modal: 'feedbackModal' }, '');
         }
 
-        function closeFeedbackModal() {
+        function closeFeedbackModal(fromPopState = false) {
             const modal = document.getElementById('feedbackModal');
+            if (!modal.classList.contains('active')) return;
+
             modal.classList.remove('active');
             document.body.style.overflow = '';
+
+            if (!fromPopState && history.state && history.state.modal === 'feedbackModal') {
+                history.back();
+            }
         }
 
         function closeModalOnOverlay(event) {
@@ -1189,67 +1268,41 @@
             }
         }
 
-        /* --- Управление полноэкранным просмотром скриншотов (Lightbox) --- */
+        /* --- Lightbox --- */
         function openLightbox(src) {
             const lightbox = document.getElementById('lightboxModal');
             const lightboxImg = document.getElementById('lightboxImg');
             lightboxImg.src = src;
             lightbox.classList.add('active');
             document.body.style.overflow = 'hidden';
+            history.pushState({ modal: 'lightbox' }, '');
         }
 
-        function closeLightbox() {
+        function closeLightbox(fromPopState = false) {
             const lightbox = document.getElementById('lightboxModal');
+            if (!lightbox.classList.contains('active')) return;
+
             lightbox.classList.remove('active');
             document.body.style.overflow = '';
-        }
 
-        /* --- Возврат назад по страницам --- */
-        function goBack() {
-            const lightbox = document.getElementById('lightboxModal');
-            const feedbackModal = document.getElementById('feedbackModal');
-
-            // Если открыто модальное окно или просмотр фото — сначала закрываем его
-            if (lightbox && lightbox.classList.contains('active')) {
-                closeLightbox();
-                return;
-            }
-            if (feedbackModal && feedbackModal.classList.contains('active')) {
-                closeFeedbackModal();
-                return;
-            }
-
-            // Навигация назад по страницам
-            const activePage = document.querySelector('.page.active');
-            if (!activePage) return;
-
-            const activeId = activePage.id;
-
-            if (activeId === 'page-details') {
-                navigate('page-projects');
-            } else if (activeId === 'page-projects' || activeId === 'page-resume') {
-                navigate('page-home');
+            if (!fromPopState && history.state && history.state.modal === 'lightbox') {
+                history.back();
             }
         }
 
-        /* Обработчик горячих клавиш (Escape и Backspace) */
+        /* Обработка клавиатуры (Escape/Backspace) */
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                closeFeedbackModal();
-                closeLightbox();
-            } else if (e.key === 'Backspace') {
-                // Игнорируем Backspace, если пользователь печатает в тексте (input / textarea)
+            if (e.key === 'Backspace' || e.key === 'Escape') {
                 const targetTag = e.target.tagName.toLowerCase();
                 if (targetTag === 'input' || targetTag === 'textarea' || e.target.isContentEditable) {
                     return;
                 }
 
-                e.preventDefault(); // Предотвращаем стандартный переход браузера
-                goBack();
+                e.preventDefault();
+                history.back();
             }
         });
 
-        // Функция копирования почты в буфер обмена
         function copyEmail() {
             const email = 'signainc.dev@gmail.com';
             navigator.clipboard.writeText(email).then(() => {
@@ -1271,6 +1324,7 @@
             });
         }
 
+        /* Рендер новостей с обновлённой кнопкой перехода */
         function renderNews() {
             const container = document.getElementById('news-container');
             if (!container) return;
@@ -1281,9 +1335,22 @@
                 card.className = 'news-card';
 
                 const hasLink = item.url && item.url.trim() !== '';
-                const linkHtml = hasLink 
-                    ? `<a class="news-link-btn" href="${item.url}" target="_blank">Подробнее</a>` 
-                    : '';
+                let linkHtml = '';
+
+                if (hasLink) {
+                    const isTelegram = item.url.includes('t.me') || item.url.includes('telegram');
+                    const linkText = isTelegram ? 'Читать в Telegram' : 'Перейти к источнику';
+                    const iconSvg = isTelegram 
+                        ? `<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>`
+                        : `<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>`;
+
+                    linkHtml = `
+                        <a class="news-link-btn" href="${item.url}" target="_blank" rel="noopener noreferrer">
+                            ${iconSvg}
+                            <span>${linkText}</span>
+                        </a>
+                    `;
+                }
 
                 card.innerHTML = `
                     <div>
@@ -1305,16 +1372,6 @@
             }, { passive: false });
         }
 
-        function navigate(pageId) {
-            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
-            document.getElementById(pageId).classList.add('active');
-            
-            if(pageId === 'page-projects') {
-                renderProjects();
-            }
-        }
-
-        /* Автоматический скан папки на наличие скриншотов */
         async function getProjectScreenshots(id) {
             const screenshots = [];
             let index = 1;
@@ -1339,7 +1396,6 @@
             return screenshots;
         }
 
-        /* Рендер списка проектов */
         function renderProjects() {
             const container = document.getElementById('projects-container');
             container.innerHTML = '';
@@ -1371,8 +1427,7 @@
             });
         }
 
-        /* Страница деталей проекта */
-        async function openDetails(id) {
+        async function openDetails(id, pushState = true) {
             const project = siteData.projects.find(p => p.id === id);
             if (!project) return;
 
@@ -1388,7 +1443,6 @@
             gallery.innerHTML = '';
             gallery.scrollLeft = 0;
             
-            // 1. Отрисовка видео
             if (project.video && project.video.trim() !== '') {
                 if (project.video.includes('youtube.com') || project.video.includes('youtu.be')) {
                     gallery.innerHTML += `
@@ -1404,7 +1458,6 @@
                 }
             }
 
-            // 2. Автоматический поиск и отрисовка скриншотов
             const screenshots = await getProjectScreenshots(id);
             if (screenshots.length > 0) {
                 screenshots.forEach(imgUrl => {
@@ -1427,8 +1480,14 @@
                 buyContainer.innerHTML = `<button class="btn-buy" onclick="alert('Переход к оплате...')">Купить за ${project.price}</button>`;
             }
 
-            navigate('page-details');
+            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+            document.getElementById('page-details').classList.add('active');
             gallery.scrollLeft = 0;
+            window.scrollTo(0, 0);
+
+            if (pushState) {
+                history.pushState({ pageId: 'page-details', projectId: id }, '', '#project-' + id);
+            }
         }
     </script>
 </body>

@@ -1,18 +1,4 @@
 {
-  "profile": {
-    "heading": "Unity Game Developer",
-    "description": "Создаю игры и цифровые сервисы полного цикла: от проектирования UI-архитектуры и оптимизации до финального релиза под Mobile и WebGL.",
-    "techStack": [
-      "Unity",
-      "C#",
-      "Flutter",
-      "Dart",
-      "WebGL",
-      "Mobile (Android/iOS)",
-      "UI Architecture",
-      "Optimization"
-    ]
-  },
   "news": [
     {
       "id": 1,
