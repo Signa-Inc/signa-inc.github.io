@@ -1381,29 +1381,16 @@
             }, { passive: false });
         }
 
-        async function getProjectScreenshots(id) {
-            const screenshots = [];
-            let index = 1;
-            const maxLimit = 25;
-
-            while (index <= maxLimit) {
-                const imgUrl = `Screenshots/${id}/${index}.webp`;
-                try {
-                    const response = await fetch(imgUrl, { method: 'HEAD' });
-                    const contentType = response.headers.get('content-type') || '';
-
-                    if (response.ok && !contentType.includes('text/html')) {
-                        screenshots.push(imgUrl);
-                        index++;
-                    } else {
-                        break;
-                    }
-                } catch (err) {
-                    break;
-                }
-            }
-            return screenshots;
-        }
+        function getProjectScreenshots(project) {
+    	    const screenshots = [];
+    	    const count = project.screenshotCount || 0;
+    
+    	    for (let i = 1; i <= count; i++) {
+    	        screenshots.push(`Screenshots/${project.id}/${i}.webp`);
+    	    }
+    
+    	    return screenshots;
+	}
 
         function renderProjects() {
             const container = document.getElementById('projects-container');
@@ -1473,7 +1460,7 @@
                 }
             }
 
-            const screenshots = await getProjectScreenshots(project.id);
+            const screenshots = const screenshots = getProjectScreenshots(project);
             if (screenshots.length > 0) {
                 screenshots.forEach(imgUrl => {
                     gallery.innerHTML += `<img src="${imgUrl}" class="gallery-img" loading="lazy" alt="${project.title}" onclick="openLightbox('${imgUrl}')">`;
