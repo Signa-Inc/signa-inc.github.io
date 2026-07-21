@@ -533,7 +533,7 @@
             stroke: var(--primary-color);
         }
 
-        /* --- Модальное окно обратной связи --- */
+        /* --- Модальное окно обращения по Email --- */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -611,64 +611,131 @@
         .modal-subtitle {
             font-size: 14px;
             color: var(--text-secondary);
-            margin-bottom: 24px;
+            margin-bottom: 20px;
             line-height: 1.5;
         }
 
-        .form-group {
-            margin-bottom: 16px;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        .form-group label {
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--text-main);
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 12px 16px;
-            background: rgba(11, 13, 18, 0.6);
+        /* Инфо-блок с адресом почты */
+        .email-info-card {
+            background: rgba(11, 13, 18, 0.7);
             border: 1px solid var(--border-color);
-            border-radius: 10px;
-            color: var(--text-main);
-            font-family: inherit;
-            font-size: 14px;
-            transition: all 0.2s ease;
-            outline: none;
-        }
-
-        .form-control:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 12px var(--primary-glow);
-            background: rgba(11, 13, 18, 0.9);
-        }
-
-        textarea.form-control {
-            resize: vertical;
-            min-height: 110px;
-        }
-
-        .form-success {
-            display: none;
-            text-align: center;
-            padding: 20px 0 10px;
-        }
-
-        .form-success-icon {
-            width: 56px;
-            height: 56px;
-            background: rgba(6, 182, 212, 0.15);
-            border: 1px solid var(--accent-color);
-            border-radius: 50%;
+            border-radius: 14px;
+            padding: 16px;
             display: flex;
             align-items: center;
-            justify-content: center;
-            margin: 0 auto 16px;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 20px;
+            box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.4);
+            flex-wrap: wrap;
+        }
+
+        .email-address-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 0;
+        }
+
+        .email-icon {
+            width: 20px;
+            height: 20px;
+            stroke: var(--primary-color);
+            flex-shrink: 0;
+        }
+
+        .email-address {
+            font-family: monospace, sans-serif;
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text-main);
+            word-break: break-all;
+        }
+
+        .btn-copy-email {
+            padding: 8px 14px;
+            font-size: 13px;
+            font-weight: 600;
+            background: rgba(168, 85, 247, 0.12);
+            color: var(--text-main);
+            border: 1px solid var(--primary-color);
+            border-radius: 8px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.25s ease;
+            flex-shrink: 0;
+            font-family: inherit;
+        }
+
+        .btn-copy-email:hover {
+            background: rgba(168, 85, 247, 0.25);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px var(--primary-glow);
+        }
+
+        .btn-copy-email.copied {
+            background: rgba(6, 182, 212, 0.2);
+            border-color: var(--accent-color);
             color: var(--accent-color);
+        }
+
+        .btn-copy-email svg {
+            width: 15px;
+            height: 15px;
+            stroke: currentColor;
+        }
+
+        .modal-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .btn-modal-action {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.25s ease;
+            font-family: inherit;
+        }
+
+        .btn-mailto {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-mailto:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .btn-gmail {
+            background: linear-gradient(135deg, #a855f7, #7c3aed);
+            color: #ffffff;
+            border: 1px solid transparent;
+            box-shadow: 0 4px 16px var(--primary-glow);
+        }
+
+        .btn-gmail:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(168, 85, 247, 0.4);
+            filter: brightness(1.1);
+        }
+
+        .btn-modal-action svg {
+            width: 18px;
+            height: 18px;
+            stroke: currentColor;
         }
 
         @media (max-width: 768px) {
@@ -681,6 +748,8 @@
             footer { padding: 20px; flex-direction: column; align-items: flex-start; }
             .contacts-dropdown { right: auto; left: 0; }
             .modal-content { padding: 24px; }
+            .email-info-card { flex-direction: column; align-items: flex-start; }
+            .btn-copy-email { width: 100%; justify-content: center; }
         }
     </style>
 </head>
@@ -756,7 +825,7 @@
                         <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
                         Telegram
                     </a>
-                    <!-- Кнопка вызова модальной формы обратной связи -->
+                    <!-- Вызов модального окна контактов -->
                     <a href="#" onclick="openFeedbackModal(event)">
                         <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
                         Email
@@ -766,7 +835,7 @@
         </div>
     </footer>
 
-    <!-- Модальное окно обратной связи -->
+    <!-- Модальное окно обращения по Email -->
     <div class="modal-overlay" id="feedbackModal" onclick="closeModalOnOverlay(event)">
         <div class="modal-content">
             <button class="modal-close" onclick="closeFeedbackModal()" aria-label="Закрыть">
@@ -776,48 +845,46 @@
                 </svg>
             </button>
 
-            <div id="modalFormContainer">
-                <h3 class="modal-title">Написать нам</h3>
-                <p class="modal-subtitle">Заполните форму ниже, и мы ответим вам на указанную почту в ближайшее время.</p>
-                
-                <form id="feedbackForm" onsubmit="handleFeedbackSubmit(event)">
-                    <div class="form-group">
-                        <label for="feedbackName">Ваше имя</label>
-                        <input type="text" id="feedbackName" class="form-control" placeholder="Иван" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="feedbackEmail">Ваш Email</label>
-                        <input type="email" id="feedbackEmail" class="form-control" placeholder="example@mail.ru" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="feedbackSubject">Тема обращения</label>
-                        <input type="text" id="feedbackSubject" class="form-control" placeholder="Сотрудничество / Вопрос по проекту">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="feedbackMessage">Сообщение</label>
-                        <textarea id="feedbackMessage" class="form-control" placeholder="Опишите ваш вопрос или предложение..." required></textarea>
-                    </div>
-
-                    <button type="submit" class="btn-primary" style="width: 100%; margin-top: 8px; padding: 14px;">
-                        Отправить сообщение
-                    </button>
-                </form>
+            <h3 class="modal-title">Связаться по Email</h3>
+            <p class="modal-subtitle">Чтобы отправить нам сообщение, напишите прямо на наш почтовый адрес:</p>
+            
+            <!-- Инфо-блок с почтой -->
+            <div class="email-info-card">
+                <div class="email-address-wrapper">
+                    <svg class="email-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect width="20" height="16" x="2" y="4" rx="2"/>
+                        <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+                    </svg>
+                    <span class="email-address">signainc.dev@gmail.com</span>
+                </div>
+                <button class="btn-copy-email" id="copyEmailBtn" onclick="copyEmail()">
+                    <svg id="copyIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>
+                        <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
+                    </svg>
+                    <span id="copyBtnText">Скопировать</span>
+                </button>
             </div>
 
-            <div id="modalSuccessContainer" class="form-success">
-                <div class="form-success-icon">
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="20 6 9 17 4 12"></polyline>
+            <!-- Кнопки действий -->
+            <div class="modal-actions">
+                <a href="mailto:signainc.dev@gmail.com" class="btn-modal-action btn-mailto">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M22 13V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h9"/>
+                        <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+                        <path d="M19 16v6"/>
+                        <path d="M16 19h6"/>
                     </svg>
-                </div>
-                <h3 style="font-size: 1.3rem; margin-bottom: 8px;">Сообщение отправлено!</h3>
-                <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 24px; line-height: 1.5;">
-                    Спасибо за обращение. Мы свяжемся с вами в ближайшее время.
-                </p>
-                <button class="btn-secondary" onclick="closeFeedbackModal()" style="margin-bottom: 0; width: 100%;">Понятно</button>
+                    Открыть почтовый клиент
+                </a>
+                <a href="https://mail.google.com/mail/?view=cm&fs=1&to=signainc.dev@gmail.com" target="_blank" class="btn-modal-action btn-gmail">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                        <polyline points="15 3 21 3 21 9"/>
+                        <line x1="10" y1="14" x2="21" y2="3"/>
+                    </svg>
+                    Открыть Gmail
+                </a>
             </div>
         </div>
     </div>
@@ -874,7 +941,7 @@
             }
         });
 
-        /* --- Управление модальным окном обратной связи --- */
+        /* --- Управление модальным окном Email --- */
         function openFeedbackModal(event) {
             if (event) event.preventDefault();
             
@@ -883,11 +950,6 @@
             const btn = document.getElementById('contactsBtn');
             if (dropdown) dropdown.classList.remove('show');
             if (btn) btn.classList.remove('active');
-
-            // Сбрасываем форму в исходное состояние
-            document.getElementById('feedbackForm').reset();
-            document.getElementById('modalFormContainer').style.display = 'block';
-            document.getElementById('modalSuccessContainer').style.display = 'none';
 
             // Показываем модальное окно
             const modal = document.getElementById('feedbackModal');
@@ -907,27 +969,33 @@
             }
         }
 
-        // Закрытие модального окна по клавише Escape
+        // Закрытие по клавише Escape
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 closeFeedbackModal();
             }
         });
 
-        // Обработка отправки формы
-        function handleFeedbackSubmit(event) {
-            event.preventDefault();
+        // Функция копирования почты в буфер обмена с подтверждающей анимацией
+        function copyEmail() {
+            const email = 'signainc.dev@gmail.com';
+            navigator.clipboard.writeText(email).then(() => {
+                const btn = document.getElementById('copyEmailBtn');
+                const btnText = document.getElementById('copyBtnText');
+                const icon = document.getElementById('copyIcon');
 
-            const name = document.getElementById('feedbackName').value;
-            const email = document.getElementById('feedbackEmail').value;
-            const subject = document.getElementById('feedbackSubject').value;
-            const message = document.getElementById('feedbackMessage').value;
+                btn.classList.add('copied');
+                btnText.innerText = 'Скопировано!';
+                icon.innerHTML = `<polyline points="20 6 9 17 4 12"></polyline>`;
 
-            console.log('Отправка формы обратной связи:', { name, email, subject, message });
-
-            // Показываем экран успешной отправки
-            document.getElementById('modalFormContainer').style.display = 'none';
-            document.getElementById('modalSuccessContainer').style.display = 'block';
+                setTimeout(() => {
+                    btn.classList.remove('copied');
+                    btnText.innerText = 'Скопировать';
+                    icon.innerHTML = `<rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>`;
+                }, 2000);
+            }).catch(err => {
+                console.error('Не удалось скопировать: ', err);
+            });
         }
 
         function renderNews() {
@@ -985,12 +1053,11 @@
                     const response = await fetch(imgUrl, { method: 'HEAD' });
                     const contentType = response.headers.get('content-type') || '';
 
-                    // Проверяем, что файл существует и это действительно картинка, а не SPA-перенаправление
                     if (response.ok && !contentType.includes('text/html')) {
                         screenshots.push(imgUrl);
                         index++;
                     } else {
-                        break; // Файлы закончились
+                        break;
                     }
                 } catch (err) {
                     break;
@@ -1046,7 +1113,7 @@
 
             const gallery = document.getElementById('detail-gallery');
             gallery.innerHTML = '';
-            gallery.scrollLeft = 0; // Сбрасываем ползунок в начало при открытии
+            gallery.scrollLeft = 0;
             
             // 1. Отрисовка видео
             if (project.video && project.video.trim() !== '') {
@@ -1064,7 +1131,7 @@
                 }
             }
 
-            // 2. Автоматический поиск и отрисовка скриншотов из папки Screenshots/{id}/
+            // 2. Автоматический поиск и отрисовка скриншотов
             const screenshots = await getProjectScreenshots(id);
             screenshots.forEach(imgUrl => {
                 gallery.innerHTML += `<img src="${imgUrl}" class="gallery-img" loading="lazy" alt="${project.title}">`;
@@ -1083,8 +1150,6 @@
             }
 
             navigate('page-details');
-            
-            // Финальная страховка: сбрасываем скролл после того, как страница полностью переключена
             gallery.scrollLeft = 0;
         }
     </script>
