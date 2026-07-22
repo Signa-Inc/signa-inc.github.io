@@ -11,9 +11,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <!-- Предзагрузка data.json -->
-    <link rel="preload" href="data.json?v=1.0" as="fetch" crossorigin="anonymous">
-
     <style>
         :root {
             color-scheme: dark;
@@ -114,7 +111,6 @@
             border-color: var(--border-color);
         }
 
-        /* Активное состояние кнопки в шапке */
         .nav-btn.active {
             color: var(--text-main);
             background: rgba(168, 85, 247, 0.15);
@@ -129,7 +125,6 @@
             width: 100%;
         }
 
-        /* Управление видимостью страниц */
         .page { 
             display: none; 
             animation: slideUpFade 0.4s cubic-bezier(0.16, 1, 0.3, 1); 
@@ -141,7 +136,6 @@
             to { opacity: 1; transform: translateY(0); } 
         }
 
-        /* Кнопки */
         button {
             padding: 12px 28px;
             border: 1px solid transparent;
@@ -219,7 +213,6 @@
             box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
         }
 
-        /* Главная страница */
         #page-home { padding: 20px 0 40px; text-align: left; }
 
         #page-home h1 {
@@ -242,7 +235,6 @@
             margin-bottom: 20px;
         }
 
-        /* Стек технологий */
         .tech-stack {
             display: flex;
             flex-wrap: wrap;
@@ -288,7 +280,6 @@
             overflow: hidden;
         }
 
-        /* Анонсы и Релизы */
         .announcements-section {
             margin-top: 50px;
             padding-top: 40px;
@@ -324,7 +315,6 @@
         .news-title { font-size: 1rem; font-weight: 700; margin-bottom: 8px; }
         .news-text { font-size: 14px; color: var(--text-secondary); line-height: 1.5; margin-bottom: 16px; }
 
-        /* Обновлённый стиль кнопки перехода в новостях */
         .news-link-btn {
             display: inline-flex;
             align-items: center;
@@ -362,7 +352,6 @@
             stroke: #ffffff;
         }
 
-        /* Проекты */
         .projects-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -408,7 +397,6 @@
 
         .project-info h3 { font-size: 1.25rem; font-weight: 700; letter-spacing: -0.3px; }
 
-        /* Резюме */
         .resume-container {
             display: flex;
             flex-direction: column;
@@ -475,7 +463,6 @@
             margin-bottom: 8px;
         }
 
-        /* Статусы */
         .status { 
             font-size: 12px; 
             font-weight: 600;
@@ -500,7 +487,6 @@
             border: 1px solid rgba(6, 182, 212, 0.3); 
         }
 
-        /* Детали */
         .details-header { 
             display: flex; 
             gap: 32px; 
@@ -576,7 +562,6 @@
             transform: translateY(-2px);
         }
 
-        /* Lightbox */
         .lightbox-overlay {
             position: fixed;
             top: 0;
@@ -618,7 +603,6 @@
             transform: scale(1);
         }
 
-        /* Подвал */
         footer {
             margin-top: auto;
             border-top: 1px solid var(--border-color);
@@ -720,7 +704,6 @@
             stroke: var(--primary-color);
         }
 
-        /* Модальное окно Email */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -954,7 +937,7 @@
 
     <div class="container">
         
-        <!-- Главная страница (Данные профиля встроенны напрямую) -->
+        <!-- Главная страница -->
         <div id="page-home" class="page active">
             <h1>Unity Game Developer</h1>
             <p>Создаю игры и цифровые сервисы полного цикла: от проектирования UI-архитектуры и оптимизации до финального релиза под Mobile и WebGL.</p>
@@ -975,13 +958,13 @@
                 <button class="btn-resume" onclick="navigate('page-resume')">Резюме</button>
             </div>
 
-            <!-- Блок Анонсов и Релизов -->
             <div class="announcements-section">
                 <h2 class="section-title">Анонсы & Релизы</h2>
                 <div class="news-grid" id="news-container"></div>
             </div>
         </div>
 
+        <!-- Проекты -->
         <div id="page-projects" class="page">
             <button class="btn-secondary" onclick="navigate('page-home')">Назад на главную</button>
             
@@ -989,7 +972,7 @@
             <div class="projects-grid" id="projects-container"></div>
         </div>
 
-        <!-- Страница Резюме -->
+        <!-- Резюме -->
         <div id="page-resume" class="page">
             <button class="btn-secondary" onclick="navigate('page-home')">Назад на главную</button>
             
@@ -1041,6 +1024,7 @@
             </div>
         </div>
 
+        <!-- Детали проекта -->
         <div id="page-details" class="page">
             <button class="btn-secondary" onclick="navigate('page-projects')">Назад к проектам</button>
             <div class="details-header">
@@ -1145,7 +1129,77 @@
     </div>
 
     <script>
-        let siteData = { news: [], projects: [] };
+        /* ==========================================================================
+           ДАННЫЕ САЙТА (РЕДАКТИРУЙТЕ ЗДЕСЬ НОВОСТИ И ПРОЕКТЫ)
+           ========================================================================== */
+        const siteData = {
+          "news": [
+            {
+              "id": 1,
+              "date": "Июль 2026",
+              "title": "Sajdah Helper — Web-версия для iOS",
+              "text": "Запустили веб-версию приложения для пользователей iOS без необходимости установки из сторов.",
+              "url": "https://t.me/Signa_Inc/3"
+            },
+            {
+              "id": 2,
+              "date": "В разработке",
+              "title": "Эхо Рейса 817",
+              "text": "Активно тестируем механики турбулентности и планирование атмосферных локаций ПК-хоррора.",
+              "url": null
+            }
+          ],
+          "projects": [
+            {
+              "id": 1,
+              "title": "Sajdah Helper",
+              "status": "dev",
+              "statusText": "В разработке",
+              "tags": ["Flutter", "Dart", "Computer Vision", "Android", "PWA / Web"],
+              "screenshotsCount": 0,
+              "video": null,
+              "shortDescription": "Умное мобильное приложение для автоматического отслеживания совершаемых ракаатов и суджудов через камеру устройства.",
+              "fullDescription": "Инновационное Android-приложение, разработанное на Flutter, которое помогает мусульманам безошибочно контролировать количество совершенных суджудов и ракаатов во время молитвы. Используя фронтальную камеру устройства и алгоритмы сравнения кадров, приложение отслеживает движения в реальном времени без необходимости прикасаться к экрану.",
+              "links": [
+                { "name": "Скачать с RuStore", "url": "https://www.rustore.ru/catalog/app/com.darkframe.sajdah_helper" },
+                { "name": "Открыть Web-версию (iOS)", "url": "./Sajdah_Helper_iOS/" }
+              ],
+              "price": null
+            },
+            {
+              "id": 2,
+              "title": "Echo Of Flight 817",
+              "status": "dev",
+              "statusText": "В разработке",
+              "tags": ["Unity", "C#", "PC", "Atmospheric Horror"],
+              "screenshotsCount": 0,
+              "video": null,
+              "shortDescription": "Атмосферный ПК-хоррор о загадочном происшествии на борту пассажирского авиалайнера.",
+              "fullDescription": "Сюжетный психологический хоррор от первого лица для ПК. Игроку предстоит столкнуться с реалистичной физикой турбулентности, пугающими аномалиями и раскрыть тайну исчезновения экипажа во время ночного рейса.",
+              "links": [],
+              "price": null
+            },
+            {
+              "id": 3,
+              "title": "Still",
+              "status": "done",
+              "statusText": "Релиз",
+              "tags": ["Unity", "C#", "WebGL", "GameJam"],
+              "screenshotsCount": 0,
+              "video": null,
+              "shortDescription": "Экспериментальный браузерный WebGL-проект, созданный в рамках джема на itch.io.",
+              "fullDescription": "Атмосферный короткометражный игровой проект, разработанный специально для международной платформы itch.io. Игра сфокусирована на передаче чувства изоляции, визуальном повествовании и проработке звукового пространства.",
+              "links": [
+                { "name": "itch.io", "url": "https://dark-frame.itch.io/still" }
+              ],
+              "price": null
+            }
+          ]
+        };
+
+        /* ==========================================================================
+           ЛОГИКА САЙТА
+           ========================================================================== */
 
         // Вспомогательная функция для превращения названия проекта в URL-slug
         function slugify(text) {
@@ -1153,40 +1207,30 @@
                 .toString()
                 .toLowerCase()
                 .trim()
-                .replace(/[\s_]+/g, '-')       // Заменяем пробелы и подчеркивания на дефисы
-                .replace(/[^\w\-]+/g, '')      // Удаляем все спецсимволы (оставляем буквы, цифры и дефисы)
-                .replace(/\-\-+/g, '-')        // Заменяем повторяющиеся дефисы на один
-                .replace(/^-+/, '')            // Удаляем дефис в начале
-                .replace(/-+$/, '');           // Удаляем дефис в конце
+                .replace(/[\s_]+/g, '-')
+                .replace(/[^\w\-]+/g, '')
+                .replace(/\-\-+/g, '-')
+                .replace(/^-+/, '')
+                .replace(/-+$/, '');
         }
 
-        async function loadSiteData() {
-            try {
-                // Добавлена сброс-метка кэша (?v=), чтобы iOS Safari обязательно загружал свежий JSON
-                const response = await fetch('data.json?v=1.0');
-                if (!response.ok) throw new Error('Ошибка сети при загрузке JSON');
-                siteData = await response.json();
-                
-                renderNews();
+        function initSite() {
+            renderNews();
 
-                // Автоматическое восстановление состояния по Хэшу при старте
-                if (window.location.hash) {
-                    const hash = window.location.hash;
-                    if (hash.startsWith('#project-')) {
-                        const projSlug = decodeURIComponent(hash.replace('#project-', ''));
-                        if (projSlug) openDetails(projSlug, false);
-                    } else if (hash === '#projects') {
-                        navigate('page-projects', false);
-                    } else if (hash === '#resume') {
-                        navigate('page-resume', false);
-                    }
+            // Восстановление состояния по хэшу URL
+            if (window.location.hash) {
+                const hash = window.location.hash;
+                if (hash.startsWith('#project-')) {
+                    const projSlug = decodeURIComponent(hash.replace('#project-', ''));
+                    if (projSlug) openDetails(projSlug, false);
+                } else if (hash === '#projects') {
+                    navigate('page-projects', false);
+                } else if (hash === '#resume') {
+                    navigate('page-resume', false);
                 }
-            } catch (error) {
-                console.error('Не удалось загрузить данные:', error);
             }
         }
 
-        /* --- Инициализация истории браузера и системного жеста "Назад" --- */
         if (!history.state) {
             history.replaceState({ pageId: 'page-home' }, '', window.location.hash || '#home');
         }
@@ -1227,7 +1271,6 @@
                 renderProjects();
             }
 
-            // Управляем подсветкой кнопок в шапке
             document.querySelectorAll('.header-nav .nav-btn').forEach(btn => btn.classList.remove('active'));
             if (pageId === 'page-projects') {
                 const btn = document.querySelector('.header-nav button[onclick*="page-projects"]');
@@ -1245,7 +1288,7 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            loadSiteData();
+            initSite();
         });
 
         function toggleContacts(event) {
@@ -1265,7 +1308,6 @@
             }
         });
 
-        /* --- Модальное окно Email --- */
         function openFeedbackModal(event) {
             if (event) event.preventDefault();
             
@@ -1300,7 +1342,6 @@
             }
         }
 
-        /* --- Lightbox --- */
         function openLightbox(src) {
             const lightbox = document.getElementById('lightboxModal');
             const lightboxImg = document.getElementById('lightboxImg');
@@ -1433,7 +1474,6 @@
             });
         }
 
-        // Функция открытия деталей проекта
         function openDetails(identifier, pushState = true) {
             const project = siteData.projects.find(p => 
                 p.id === identifier || 
@@ -1455,7 +1495,6 @@
             gallery.innerHTML = '';
             gallery.scrollLeft = 0;
             
-            // 1. Добавляем видео, если оно есть
             if (project.video && project.video.trim() !== '') {
                 if (project.video.includes('youtube.com') || project.video.includes('youtu.be')) {
                     gallery.innerHTML += `
@@ -1471,7 +1510,6 @@
                 }
             }
 
-            // 2. Генерируем пути к скриншотам на основе screenshotsCount
             const count = project.screenshotsCount || 0;
 
             if (count > 0) {
@@ -1480,7 +1518,6 @@
                     gallery.innerHTML += `<img src="${imgUrl}" class="gallery-img" loading="lazy" alt="${project.title}" onclick="openLightbox('${imgUrl}')">`;
                 }
             } else {
-                // Если скриншотов = 0 -> Добавляем обложку/заглушку
                 const coverUrl = `Screenshots/${project.id}/cover.webp`;
                 gallery.innerHTML += `
                     <img src="${coverUrl}" 
@@ -1492,7 +1529,6 @@
                 `;
             }
 
-            // 3. Ссылки и кнопки (экранируем пробелы и спецсимволы в URL)
             const linksContainer = document.getElementById('detail-links');
             linksContainer.innerHTML = '';
             if (project.links && Array.isArray(project.links)) {
@@ -1508,11 +1544,9 @@
                 buyContainer.innerHTML = `<button class="btn-buy" onclick="alert('Переход к оплате...')">Купить за ${project.price}</button>`;
             }
 
-            // Переключение экрана
             document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
             document.getElementById('page-details').classList.add('active');
             
-            // Подсвечиваем кнопку "Проекты" в шапке так как детали — часть проектов
             document.querySelectorAll('.header-nav .nav-btn').forEach(btn => btn.classList.remove('active'));
             const projectsBtn = document.querySelector('.header-nav button[onclick*="page-projects"]');
             if (projectsBtn) projectsBtn.classList.add('active');
