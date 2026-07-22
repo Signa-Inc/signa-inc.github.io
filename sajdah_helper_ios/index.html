@@ -32,12 +32,22 @@
     let globalErrorLog = "";
 
     function showErrorOverlay(errorMsg) {
+      if (!errorMsg) return;
       globalErrorLog += (globalErrorLog ? "\n\n--- NEXT ERROR ---\n" : "") + errorMsg;
-      const overlay = document.getElementById('error-overlay');
-      const textElem = document.getElementById('error-text');
-      if (overlay && textElem) {
-        textElem.innerText = globalErrorLog;
-        overlay.style.display = 'flex';
+
+      const renderOverlay = () => {
+        const overlay = document.getElementById('error-overlay');
+        const textElem = document.getElementById('error-text');
+        if (overlay && textElem) {
+          textElem.innerText = globalErrorLog;
+          overlay.style.display = 'flex';
+        }
+      };
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', renderOverlay);
+      } else {
+        renderOverlay();
       }
     }
 
