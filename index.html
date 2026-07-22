@@ -11,6 +11,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
+    <!-- Предзагрузка data.json -->
+    <link rel="preload" href="data.json?v=1.0" as="fetch" crossorigin="anonymous">
+
     <style>
         :root {
             color-scheme: dark;
@@ -109,6 +112,13 @@
             color: var(--text-main);
             background: rgba(255, 255, 255, 0.05);
             border-color: var(--border-color);
+        }
+
+        /* Активное состояние кнопки в шапке */
+        .nav-btn.active {
+            color: var(--text-main);
+            background: rgba(168, 85, 247, 0.15);
+            border-color: rgba(168, 85, 247, 0.3);
         }
 
         .container {
@@ -1153,7 +1163,7 @@
         async function loadSiteData() {
             try {
                 // Добавлена сброс-метка кэша (?v=), чтобы iOS Safari обязательно загружал свежий JSON
-                const response = await fetch('data.json?v=' + Date.now());
+                const response = await fetch('data.json?v=1.0');
                 if (!response.ok) throw new Error('Ошибка сети при загрузке JSON');
                 siteData = await response.json();
                 
@@ -1215,6 +1225,16 @@
 
             if(pageId === 'page-projects') {
                 renderProjects();
+            }
+
+            // Управляем подсветкой кнопок в шапке
+            document.querySelectorAll('.header-nav .nav-btn').forEach(btn => btn.classList.remove('active'));
+            if (pageId === 'page-projects') {
+                const btn = document.querySelector('.header-nav button[onclick*="page-projects"]');
+                if (btn) btn.classList.add('active');
+            } else if (pageId === 'page-resume') {
+                const btn = document.querySelector('.header-nav button[onclick*="page-resume"]');
+                if (btn) btn.classList.add('active');
             }
 
             if (pushState) {
@@ -1491,6 +1511,12 @@
             // Переключение экрана
             document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
             document.getElementById('page-details').classList.add('active');
+            
+            // Подсвечиваем кнопку "Проекты" в шапке так как детали — часть проектов
+            document.querySelectorAll('.header-nav .nav-btn').forEach(btn => btn.classList.remove('active'));
+            const projectsBtn = document.querySelector('.header-nav button[onclick*="page-projects"]');
+            if (projectsBtn) projectsBtn.classList.add('active');
+
             gallery.scrollLeft = 0;
             window.scrollTo(0, 0);
 
