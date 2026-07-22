@@ -16,24 +16,94 @@
 
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
   <link rel="icon" type="image/png" href="icons/Icon-512.png"/>
-
-  <!-- Манифест должен быть статическим для корректного запуска iOS PWA -->
   <link rel="manifest" href="manifest.json">
 
   <title>Sajdah Helper</title>
 
+  <!-- ================================================================= -->
+  <!-- КРАШ-ОПОВЕЩАТЕЛЬ И ПЕРЕХВАТЧИК ОШИБОК ДЛЯ iOS / SAFARI / PWA     -->
+  <!-- ================================================================= -->
   <script>
-    (function() {
-      // Инициализируем флаг PWA до старта Flutter
-      window.isSamplePwaStandalone = !!(
-        navigator.standalone ||
-        window.matchMedia('(display-mode: standalone)').matches
-      );
-    })();
+    window.isSamplePwaStandalone = !!(
+      navigator.standalone ||
+      window.matchMedia('(display-mode: standalone)').matches
+    );
+
+    let globalErrorLog = "";
+
+    function showErrorOverlay(errorMsg) {
+      globalErrorLog += (globalErrorLog ? "\n\n--- NEXT ERROR ---\n" : "") + errorMsg;
+      const overlay = document.getElementById('error-overlay');
+      const textElem = document.getElementById('error-text');
+      if (overlay && textElem) {
+        textElem.innerText = globalErrorLog;
+        overlay.style.display = 'flex';
+      }
+    }
+
+    function copyErrorText() {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(globalErrorLog).then(() => {
+          alert('Текст ошибки скопирован!');
+        }).catch(() => {
+          fallbackCopy();
+        });
+      } else {
+        fallbackCopy();
+      }
+    }
+
+    function fallbackCopy() {
+      const textArea = document.createElement("textarea");
+      textArea.value = globalErrorLog;
+      document.body.appendChild(textArea);
+      textArea.select();
+      try {
+        document.execCommand("copy");
+        alert('Текст ошибки скопирован!');
+      } catch (e) {
+        alert('Не удалось скопировать автоматически. Выделите текст вручную.');
+      }
+      document.body.removeChild(textArea);
+    }
+
+    // 1. Перехват стандартных ошибок JS
+    window.onerror = function(message, source, lineno, colno, error) {
+      const str = `[JS Error]\nMsg: ${message}\nFile: ${source}:${lineno}:${colno}\nStack: ${error ? error.stack : 'N/A'}`;
+      showErrorOverlay(str);
+      return false;
+    };
+
+    // 2. Перехват необработанных Promise / Async ошибок
+    window.addEventListener('unhandledrejection', function(event) {
+      const reason = event.reason;
+      const str = `[Unhandled Promise Rejection]\nReason: ${reason && reason.stack ? reason.stack : reason}`;
+      showErrorOverlay(str);
+    });
+
+    // 3. Функция для ручного вызова из Dart
+    window.showDartError = function(errStr) {
+      showErrorOverlay(`[Dart/Flutter Error]\n${errStr}`);
+    };
   </script>
 
   <script src="flutter_bootstrap.js" async></script>
 </head>
-<body style="background-color: #000000;">
+<body style="background-color: #000000; margin: 0; padding: 0;">
+
+<!-- HTML Интерфейс Ошибки (Скрыт по умолчанию) -->
+<div id="error-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #121212; color: #ff5252; z-index: 999999; padding: 20px; box-sizing: border-box; flex-direction: column; justify-content: center; align-items: center; font-family: -apple-system, sans-serif;">
+  <div style="max-width: 600px; width: 100%; background: #1e1e1e; padding: 20px; border-radius: 12px; border: 1px solid #333; box-shadow: 0 10px 30px rgba(0,0,0,0.8);">
+    <h3 style="color: #ffffff; margin-top: 0; font-size: 18px;">⚠️ Ошибка при запуске приложения</h3>
+
+    <pre id="error-text" style="background: #000000; color: #ff8a80; padding: 12px; border-radius: 8px; white-space: pre-wrap; word-break: break-all; font-size: 12px; max-height: 250px; overflow-y: auto; font-family: monospace; border: 1px solid #2a2a2a;"></pre>
+
+    <div style="margin-top: 15px; display: flex; gap: 10px; width: 100%;">
+      <button onclick="copyErrorText()" style="flex: 1; padding: 12px; background: #333; color: #fff; border: 1px solid #555; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 14px;">📋 Скопировать</button>
+      <button onclick="location.reload()" style="flex: 1; padding: 12px; background: #0175C2; color: #fff; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 14px;">🔄 Обновить</button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
