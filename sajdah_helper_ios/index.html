@@ -1,118 +1,93 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <!--
+    If you are serving your web app in a path other than the root, change the
+    href value below to reflect the base path you are serving from.
+
+    The path provided below has to start and end with a slash "/" in order for
+    it to work correctly.
+
+    For more details:
+    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
+
+    This is a placeholder for base href that will be replaced by the value of
+    the `--base-href` argument provided to `flutter build`.
+  -->
   <base href="/sajdah_helper_ios/">
 
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="description" content="Sajdah Helper Web Application">
 
   <!-- iOS meta tags & icons -->
   <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <meta name="apple-mobile-web-app-title" content="Sajdah Helper">
-
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
+
   <link rel="icon" type="image/png" href="icons/Icon-512.png"/>
-  <link rel="manifest" href="manifest.json">
 
   <title>Sajdah Helper</title>
 
+  <!-- ИЗМЕНЕНИЕ: Динамическое подключение манифеста только для iOS/iPadOS -->
   <script>
-    // Безопасная функция проверки PWA
-    window.checkIsPwaStandalone = function() {
-      try {
-        return !!(
-          navigator.standalone ||
-          (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches)
-        );
-      } catch(e) {
-        return false;
-      }
-    };
+    (function() {
+      // Строгая проверка на iOS устройства
+      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+                    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 
-    window.globalErrorLog = "";
-
-    window.showErrorOverlay = function(errorMsg) {
-      if (!errorMsg) return;
-      window.globalErrorLog += (window.globalErrorLog ? "\n\n--- NEXT ERROR ---\n" : "") + errorMsg;
-
-      function renderOverlay() {
-        var overlay = document.getElementById('error-overlay');
-        var textElem = document.getElementById('error-text');
-        if (overlay && textElem) {
-          textElem.innerText = window.globalErrorLog;
-          overlay.style.display = 'flex';
-        }
-      }
-
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', renderOverlay);
+      if (isIOS) {
+        // Добавляем манифест только если это iOS, чтобы работало добавление на экран Домой
+        const link = document.createElement('link');
+        link.rel = 'manifest';
+        link.href = 'manifest.json';
+        document.head.appendChild(link);
       } else {
-        renderOverlay();
+        console.log("Non-iOS platform detected: manifest.json is disabled to prevent native install prompts.");
       }
-    };
-
-    window.copyErrorText = function() {
-      var text = window.globalErrorLog || "";
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(text).then(function() {
-          alert('Текст ошибки скопирован!');
-        }).catch(function() {
-          window.fallbackCopy(text);
-        });
-      } else {
-        window.fallbackCopy(text);
-      }
-    };
-
-    window.fallbackCopy = function(text) {
-      var textArea = document.createElement("textarea");
-      textArea.value = text;
-      document.body.appendChild(textArea);
-      textArea.select();
-      try {
-        document.execCommand("copy");
-        alert('Текст ошибки скопирован!');
-      } catch (e) {
-        alert('Не удалось скопировать автоматически.');
-      }
-      document.body.removeChild(textArea);
-    };
-
-    window.onerror = function(message, source, lineno, colno, error) {
-      var str = "[JS Error]\nMsg: " + message + "\nFile: " + source + ":" + lineno + ":" + colno + "\nStack: " + (error && error.stack ? error.stack : 'N/A');
-      window.showErrorOverlay(str);
-      return false;
-    };
-
-    window.addEventListener('unhandledrejection', function(event) {
-      var reason = event.reason;
-      var str = "[Unhandled Promise Rejection]\nReason: " + (reason && reason.stack ? reason.stack : reason);
-      window.showErrorOverlay(str);
-    });
-
-    window.showDartError = function(errStr) {
-      window.showErrorOverlay("[Dart/Flutter Error]\n" + errStr);
-    };
+    })();
   </script>
-
-  <script src="flutter_bootstrap.js" async></script>
 </head>
-<body style="background-color: #000000; margin: 0; padding: 0;">
+<body>
+<!-- Дополнительный перехватчик для старых версий браузеров -->
+<script>
+  window.addEventListener('beforeinstallprompt', (e) => {
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+                  (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    if (!isIOS) {
+      e.preventDefault();
+      return false;
+    }
+  });
+</script>
+<script>
+  (function() {
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+                  (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 
-<div id="error-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #121212; color: #ff5252; z-index: 999999; padding: 20px; box-sizing: border-box; flex-direction: column; justify-content: center; align-items: center; font-family: -apple-system, sans-serif;">
-  <div style="max-width: 600px; width: 100%; background: #1e1e1e; padding: 20px; border-radius: 12px; border: 1px solid #333; box-shadow: 0 10px 30px rgba(0,0,0,0.8);">
-    <h3 style="color: #ffffff; margin-top: 0; font-size: 18px;">⚠️ Ошибка при запуске приложения</h3>
-    <pre id="error-text" style="background: #000000; color: #ff8a80; padding: 12px; border-radius: 8px; white-space: pre-wrap; word-break: break-all; font-size: 12px; max-height: 250px; overflow-y: auto; font-family: monospace; border: 1px solid #2a2a2a;"></pre>
-    <div style="margin-top: 15px; display: flex; gap: 10px; width: 100%;">
-      <button onclick="window.copyErrorText()" style="flex: 1; padding: 12px; background: #333; color: #fff; border: 1px solid #555; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 14px;">📋 Скопировать</button>
-      <button onclick="location.reload()" style="flex: 1; padding: 12px; background: #0175C2; color: #fff; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 14px;">🔄 Обновить</button>
-    </div>
-  </div>
-</div>
+    // Сохраняем флаг PWA режима для Flutter
+    window.isSamplePwaStandalone = !!(navigator.standalone || window.matchMedia('(display-mode: standalone)').matches);
 
+    if (isIOS) {
+      const link = document.createElement('link');
+      link.rel = 'manifest';
+      link.href = 'manifest.json';
+      document.head.appendChild(link);
+    } else {
+      console.log("Non-iOS platform detected: manifest.json is disabled to prevent native install prompts.");
+    }
+  })();
+</script>
+
+<!--
+  You can customize the "flutter_bootstrap.js" script.
+  This is useful to provide a custom configuration to the Flutter loader
+  or to give the user feedback during the initialization process.
+
+  For more details:
+  * https://docs.flutter.dev/platform-integration/web/initialization
+-->
+<script src="flutter_bootstrap.js" async></script>
 </body>
 </html>
