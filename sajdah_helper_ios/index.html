@@ -20,80 +20,82 @@
 
   <title>Sajdah Helper</title>
 
-  <!-- ================================================================= -->
-  <!-- КРАШ-ОПОВЕЩАТЕЛЬ И ПЕРЕХВАТЧИК ОШИБОК ДЛЯ iOS / SAFARI / PWA     -->
-  <!-- ================================================================= -->
   <script>
-    window.isSamplePwaStandalone = !!(
-      navigator.standalone ||
-      window.matchMedia('(display-mode: standalone)').matches
-    );
+    // Безопасная функция проверки PWA
+    window.checkIsPwaStandalone = function() {
+      try {
+        return !!(
+          navigator.standalone ||
+          (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches)
+        );
+      } catch(e) {
+        return false;
+      }
+    };
 
-    let globalErrorLog = "";
+    window.globalErrorLog = "";
 
-    function showErrorOverlay(errorMsg) {
+    window.showErrorOverlay = function(errorMsg) {
       if (!errorMsg) return;
-      globalErrorLog += (globalErrorLog ? "\n\n--- NEXT ERROR ---\n" : "") + errorMsg;
+      window.globalErrorLog += (window.globalErrorLog ? "\n\n--- NEXT ERROR ---\n" : "") + errorMsg;
 
-      const renderOverlay = () => {
-        const overlay = document.getElementById('error-overlay');
-        const textElem = document.getElementById('error-text');
+      function renderOverlay() {
+        var overlay = document.getElementById('error-overlay');
+        var textElem = document.getElementById('error-text');
         if (overlay && textElem) {
-          textElem.innerText = globalErrorLog;
+          textElem.innerText = window.globalErrorLog;
           overlay.style.display = 'flex';
         }
-      };
+      }
 
       if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', renderOverlay);
       } else {
         renderOverlay();
       }
-    }
+    };
 
-    function copyErrorText() {
+    window.copyErrorText = function() {
+      var text = window.globalErrorLog || "";
       if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(globalErrorLog).then(() => {
+        navigator.clipboard.writeText(text).then(function() {
           alert('Текст ошибки скопирован!');
-        }).catch(() => {
-          fallbackCopy();
+        }).catch(function() {
+          window.fallbackCopy(text);
         });
       } else {
-        fallbackCopy();
+        window.fallbackCopy(text);
       }
-    }
+    };
 
-    function fallbackCopy() {
-      const textArea = document.createElement("textarea");
-      textArea.value = globalErrorLog;
+    window.fallbackCopy = function(text) {
+      var textArea = document.createElement("textarea");
+      textArea.value = text;
       document.body.appendChild(textArea);
       textArea.select();
       try {
         document.execCommand("copy");
         alert('Текст ошибки скопирован!');
       } catch (e) {
-        alert('Не удалось скопировать автоматически. Выделите текст вручную.');
+        alert('Не удалось скопировать автоматически.');
       }
       document.body.removeChild(textArea);
-    }
+    };
 
-    // 1. Перехват стандартных ошибок JS
     window.onerror = function(message, source, lineno, colno, error) {
-      const str = `[JS Error]\nMsg: ${message}\nFile: ${source}:${lineno}:${colno}\nStack: ${error ? error.stack : 'N/A'}`;
-      showErrorOverlay(str);
+      var str = "[JS Error]\nMsg: " + message + "\nFile: " + source + ":" + lineno + ":" + colno + "\nStack: " + (error && error.stack ? error.stack : 'N/A');
+      window.showErrorOverlay(str);
       return false;
     };
 
-    // 2. Перехват необработанных Promise / Async ошибок
     window.addEventListener('unhandledrejection', function(event) {
-      const reason = event.reason;
-      const str = `[Unhandled Promise Rejection]\nReason: ${reason && reason.stack ? reason.stack : reason}`;
-      showErrorOverlay(str);
+      var reason = event.reason;
+      var str = "[Unhandled Promise Rejection]\nReason: " + (reason && reason.stack ? reason.stack : reason);
+      window.showErrorOverlay(str);
     });
 
-    // 3. Функция для ручного вызова из Dart
     window.showDartError = function(errStr) {
-      showErrorOverlay(`[Dart/Flutter Error]\n${errStr}`);
+      window.showErrorOverlay("[Dart/Flutter Error]\n" + errStr);
     };
   </script>
 
@@ -101,15 +103,12 @@
 </head>
 <body style="background-color: #000000; margin: 0; padding: 0;">
 
-<!-- HTML Интерфейс Ошибки (Скрыт по умолчанию) -->
 <div id="error-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #121212; color: #ff5252; z-index: 999999; padding: 20px; box-sizing: border-box; flex-direction: column; justify-content: center; align-items: center; font-family: -apple-system, sans-serif;">
   <div style="max-width: 600px; width: 100%; background: #1e1e1e; padding: 20px; border-radius: 12px; border: 1px solid #333; box-shadow: 0 10px 30px rgba(0,0,0,0.8);">
     <h3 style="color: #ffffff; margin-top: 0; font-size: 18px;">⚠️ Ошибка при запуске приложения</h3>
-
     <pre id="error-text" style="background: #000000; color: #ff8a80; padding: 12px; border-radius: 8px; white-space: pre-wrap; word-break: break-all; font-size: 12px; max-height: 250px; overflow-y: auto; font-family: monospace; border: 1px solid #2a2a2a;"></pre>
-
     <div style="margin-top: 15px; display: flex; gap: 10px; width: 100%;">
-      <button onclick="copyErrorText()" style="flex: 1; padding: 12px; background: #333; color: #fff; border: 1px solid #555; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 14px;">📋 Скопировать</button>
+      <button onclick="window.copyErrorText()" style="flex: 1; padding: 12px; background: #333; color: #fff; border: 1px solid #555; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 14px;">📋 Скопировать</button>
       <button onclick="location.reload()" style="flex: 1; padding: 12px; background: #0175C2; color: #fff; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 14px;">🔄 Обновить</button>
     </div>
   </div>
